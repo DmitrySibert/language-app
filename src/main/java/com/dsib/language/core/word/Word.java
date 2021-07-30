@@ -1,50 +1,25 @@
 package com.dsib.language.core.word;
 
+import lombok.Getter;
+
 import java.util.List;
 
 public class Word {
+
+    @Getter
     private String wordOrigin;
+    @Getter
     private String wordTranslate;
+    @Getter
     private List<String> wordInfo;
+    @Getter
     private List<String> tags;
 
-    public Word(String wordOrigin, String wordTranslate, String[] wordInfo, String[] tags) {
+    public Word(String wordOrigin, String wordTranslate, List<String> wordInfo, List<String> tags) {
         this.wordTranslate = wordTranslate;
         this.wordOrigin = wordOrigin;
-        this.wordInfo = List.of(wordInfo);
-        this.tags = List.of(tags);
-    }
-
-    public String getWordTranslate() {
-        return wordTranslate;
-    }
-
-    public void setWordTranslate(String wordTranslate) {
-        this.wordTranslate = wordTranslate;
-    }
-
-    public String getWordOrigin() {
-        return wordOrigin;
-    }
-
-    public void setWordOrigin(String wordOrigin) {
-        this.wordOrigin = wordOrigin;
-    }
-
-    public List<String> getWordInfo() {
-        return wordInfo;
-    }
-
-    public void setWordInfo(List<String> wordInfo) {
-        this.wordInfo = wordInfo;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+        this.wordInfo = wordInfo != null ? wordInfo: List.of();
+        this.tags = tags != null ? tags: List.of();
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.dsib.language.core.training.file;
 
 import com.dsib.language.core.training.Training;
-import com.dsib.language.core.training.TrainingProvider;
+import com.dsib.language.core.training.TrainingType;
+import com.dsib.language.core.training.application.TrainingProvider;
 import com.dsib.language.core.training.file.csv.CsvRow;
 import com.dsib.language.core.training.file.csv.TrainingCsvRow;
 import com.opencsv.CSVWriter;
@@ -28,13 +29,13 @@ public class FileTrainingProvider {
     }
 
     public FileTraining getSimpleTrainingByTags(List<String> tags) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
-        Training training = trainingProvider.getSimpleTrainingByTags(tags);
+        Training training = trainingProvider.getTraining(TrainingType.TAGGED, tags, null);
         try (
             ByteArrayOutputStream baos = new ByteArrayOutputStream(); OutputStreamWriter writer = new OutputStreamWriter(baos)
         ) {
             List<CsvRow> trainingWords = new LinkedList<>();
             trainingWords.add(TrainingCsvRow.TITLE);
-            training.getWords().forEach(word -> trainingWords.add(
+            training.getTrainingSession().getWords().forEach(word -> trainingWords.add(
                     new TrainingCsvRow(word.getWordTranslate(), "", String.join(",", word.getWordInfo()))
             ));
 

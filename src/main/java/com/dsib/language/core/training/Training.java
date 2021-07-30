@@ -1,90 +1,83 @@
 package com.dsib.language.core.training;
 
-import com.dsib.language.core.word.Word;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.dsib.language.core.util.AssertUtils.assertNotNull;
 
 public class Training {
 
-    private List<Word> words;
-    private int curWordIdx;
-    private List<Word> wordsForRepetition;
-    private List<Word> approvedWords;
+    @Getter
+    private String id;
+    @Getter
+    private TrainingStatus status;
+    @Getter
+    private final TrainingType type;
+    @Getter
+    private final Integer size;
+    @Getter
+    private final List<String> tags;
+    @Getter
+    private final LocalDateTime createdAt;
+    @Getter
+    private LocalDateTime completedAt;
 
-    public Training(List<Word> words) {
-        this.words = new ArrayList<>(words);
-        wordsForRepetition = new LinkedList<>();
-        approvedWords = new LinkedList<>();
+    /**
+     * <c>TrainingSession</c> isn't persisted. It is enriched only by demand.
+     */
+    @Getter @Setter
+    private TrainingSession trainingSession;
+
+    public Training(
+            String id, TrainingStatus status, TrainingType type,
+            Integer size, List<String> tags, LocalDateTime createdAt
+    ) {
+        assertNotNull("id", id);
+        assertNotNull("status", status);
+        assertNotNull("type", type);
+        assertNotNull("tags", tags);
+        assertNotNull("createdAt", createdAt);
+        this.id = id;
+        this.status = status;
+        this.type = type;
+        this.size = size;
+        this.tags = tags;
+        this.createdAt = createdAt;
+        trainingSession = new TrainingSession(List.of());
+        completedAt = null;
     }
 
-  public Training() {
-  }
+    public TrainingDomainEvent complete() {
+        setStatus(TrainingStatus.COMPLETED);
+        setCompletedAt(LocalDateTime.now());
 
-    public void start() {
-        curWordIdx = 0;
-        wordsForRepetition.clear();
-        approvedWords.clear();
+        return new TrainingDomainEvent(this);
     }
 
-    public Word getCurrent() {
-        return words.get(curWordIdx);
+    public void setStatus(TrainingStatus status) {
+        validateStatusChange();
+        assertNotNull("status", status);
+        this.status = status;
     }
 
-    public boolean moveNext() {
-        if (isEnd()) {
-            return false;
+    public void setCompletedAt(LocalDateTime completedAt) {
+        assertNotNull("completedAt", completedAt);
+        this.completedAt = completedAt;
+    }
+
+    public void setId(String id) {
+        if (this.id != null) {
+            throw new IllegalStateException("Id can't be overwrited");
         }
-        curWordIdx++;
-        return true;
+        this.id = id;
     }
 
-    public boolean isEnd() {
-        if (words.isEmpty()) {
-            return true;
+    private void validateStatusChange() {
+        if (TrainingStatus.COMPLETED.equals(status)) {
+            throw new IllegalStateException("Can't change status from " + TrainingStatus.COMPLETED + " to " + status);
         }
-        return curWordIdx == (words.size() - 1);
-    }
-
-    public void addCurrentWordToRepeat() {
-        wordsForRepetition.add(words.get(curWordIdx));
-    }
-
-    public void approveCurrentWord() {
-        approvedWords.add(words.get(curWordIdx));
-    }
-
-    public List<Word> getWordsForRepetition() {
-        return wordsForRepetition;
-    }
-
-    public List<Word> getApprovedWords() {
-        return approvedWords;
-    }
-
-
-    public List<Word> getWords() {
-        return words;
-    }
-
-    public void setWords(List<Word> words) {
-        this.words = words;
-    }
-
-    public int getCurWordIdx() {
-        return curWordIdx;
-    }
-
-    public void setCurWordIdx(int curWordIdx) {
-        this.curWordIdx = curWordIdx;
-    }
-
-    public void setWordsForRepetition(List<Word> wordsForRepetition) {
-        this.wordsForRepetition = wordsForRepetition;
-    }
-
-    public void setApprovedWords(List<Word> approvedWords) {
-        this.approvedWords = approvedWords;
     }
 }

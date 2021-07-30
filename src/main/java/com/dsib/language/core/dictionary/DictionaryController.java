@@ -29,7 +29,7 @@ import java.util.List;
 )
 public class DictionaryController {
 
-        private DictionaryService dictionaryService;
+        private final DictionaryService dictionaryService;
 
         public DictionaryController(DictionaryService dictionaryService) {
                 this.dictionaryService = dictionaryService;
