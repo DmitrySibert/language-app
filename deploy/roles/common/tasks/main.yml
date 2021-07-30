@@ -1,0 +1,22 @@
+- name: Add nginx app proxy configuration
+  template:
+    src: "{{app_name}}.conf.j2"
+    dest: "/etc/nginx/sites-available/{{app_name}}.conf"
+    mode: '666'
+  tags:
+    - app_deploy
+
+- name: Enable nginx app configuration
+  file:
+    src:  "/etc/nginx/sites-available/{{app_name}}.conf"
+    dest: "/etc/nginx/sites-enabled/{{app_name}}.conf"
+    state: link
+    mode: '666'
+  tags:
+    - app_deploy
+
+#Might be still a bug in Ansible 2.9 on Ubuntu 20.4
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded

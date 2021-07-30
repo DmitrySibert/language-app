@@ -1,0 +1,13 @@
+[Unit]
+Description=Language application Service
+
+[Service]
+User=nobody
+ExecStart=/lib/jvm/java-11-openjdk-armhf/bin/java -Xmx256m -jar {{host_app_destination}}/{{app_file_name}}
+SuccessExitStatus=143
+TimeoutStopSec=15
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

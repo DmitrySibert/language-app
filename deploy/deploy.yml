@@ -1,0 +1,10 @@
+---
+- name: Deploy application
+  hosts: stage
+  remote_user: pi
+  become: yes
+  roles:
+    - role: nginx
+    - role: backend
+    - role: frontend
+    - role: common

@@ -1,0 +1,13 @@
+<div>
+    <h2>Select a training with parameters</h2>
+    <div>
+      <label for="training-type">Type: </label>
+      <input id="training-type" [(ngModel)]="type" placeholder="Type"/>
+    </div>
+    <div>
+        <label for="training-tags">Tags: </label>
+        <input id="training-tags" [(ngModel)]="tags" placeholder="Tags"/>
+    </div>
+    <button (click)="start()">Start</button>
+    <button (click)="clear()">Clear</button>
+</div>

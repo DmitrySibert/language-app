@@ -1,0 +1,7 @@
+frontend_src: ../frontend/dist/language-app
+frontend_destination: /home/pi/apps/language/final/language-app
+backend_src: ../target
+host_app_destination: /home/pi/apps/language
+app_version: 0.0.1-SNAPSHOT
+app_file_name: "language-{{ app_version }}.jar"
+app_name: language_app

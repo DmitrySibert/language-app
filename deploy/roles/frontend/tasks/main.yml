@@ -1,0 +1,6 @@
+---
+- name: Send frontend files
+  copy:
+    src: "{{frontend_src}}/"
+    dest: "{{frontend_destination}}/"
+    mode: '666'

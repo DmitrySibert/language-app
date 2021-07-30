@@ -1,0 +1,18 @@
+---
+- name: Send application jar-file
+  copy:
+    src: "{{backend_src}}/{{app_file_name}}"
+    dest: "{{host_app_destination}}/"
+    mode: '666'
+
+- name: Add application service config
+  template:
+    src: "{{app_name}}.service.j2"
+    dest: "/etc/systemd/system/{{app_name}}.service"
+
+#Might be still a bug in Ansible 2.9 on Ubuntu 20.4
+- name: Start application service
+  service:
+    enabled: true
+    name: "{{app_name}}"
+    state: restarted
