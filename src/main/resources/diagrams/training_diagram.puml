@@ -1,0 +1,95 @@
+@startuml
+
+package Domain {
+  class Training {
+      - id: String
+      - status: TrainingStatus
+      - type: TrainingType
+      - size: Integer
+      - tags: List<String>
+      - createdAt: LocalDateTime
+      - completedAt: LocalDateTime
+      - trainingSession: TrainingSession
+
+      + complete(): TrainingDomainEvent
+  }
+
+  class TrainingSet {
+      - words: List<Word>
+      - failed: List<Word>
+      - approved: List<Word>
+
+      + shuffle(): void
+  }
+
+  class TrainingDomainEvent {
+      - NAME: String
+      - training: Training
+  }
+
+  interface TrainingRepository {
+  }
+}
+
+package Application {
+  class TrainingFinisher {
+    finishTrainingSession(FinishTrainingDto trainingData): void
+  }
+
+  class TrainingProvider {
+    + getTraining(TrainingType type, List<String> tags, Integer size): Training
+  }
+
+  class FileTrainingProvider {
+    + build(List<String> tags): FileTraining
+  }
+
+  class FileTraining {
+    - file: InputStream
+    - name: String
+    - fileSize: int
+    - fileExtension: String
+  }
+}
+
+package Infrastructure {
+  interface TrainingSpringRepository {
+  }
+  class TrainingEntity{
+  }
+  class TrainingEntityMapper{
+  }
+  class TrainingRepositoryImpl{
+  }
+}
+
+package Presentation {
+  class FileTrainingController {
+    + getTraining(List<String> tags): FileTraining
+    + finish(FinishTrainingDto training): void
+  }
+
+  class TrainingController {
+    + get(List<String> tags,TrainingType type,Integer size): Training
+  }
+
+  class FinishTrainingDto {
+      - id: String
+      - words: List<String>
+      - wordsForRepetition: List<String>
+      - approvedWords: List<String>
+  }
+}
+
+TrainingProvider o-- TrainingRepository
+TrainingFinisher o-- TrainingRepository
+TrainingRepositoryImpl --|> TrainingRepository
+TrainingRepositoryImpl --|> TrainingSpringRepository
+TrainingRepositoryImpl o-- TrainingEntityMapper
+FileTrainingController o-- FileTrainingProvider
+FileTrainingProvider o-- TrainingProvider
+TrainingController o-- TrainingProvider
+TrainingController o-- TrainingFinisher
+Training *-- TrainingSet
+
+@enduml

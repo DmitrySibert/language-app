@@ -16,20 +16,23 @@ export class TrainingProcessorComponent implements OnInit {
   public isShowInfo: boolean;
   public word: Word;
   private curWordIndex: number;
+  private wordOrigins: Map<string, Word>;
 
   constructor(
     private trainingProvider: TrainingProvider,
     private location: Location
   ) {
-    this.training = null;
-    trainingProvider.getCurrentTraining()?.subscribe(tr => {
-      this.training = tr;
-      this.word = this.training.words[this.curWordIndex];
-    })
-    this.curWordIndex = 0;
-    this.word = { 
+    this.word = {
       wordOrigin: '', wordTranslate: '', wordInfo: [], tags: [],
     };
+    this.training = null;
+    this.wordOrigins = trainingProvider.getCurrentTrainingWordOrigins();
+    this.curWordIndex = 0;
+    this.training = trainingProvider.getCurrentTraining();
+    if (this.wordOrigins.get(this.training!.trainingSet.words[this.curWordIndex])) {
+      this.word = this.wordOrigins.get(this.training!.trainingSet.words[this.curWordIndex])!;
+    }
+    
     this.isShowInfo = false;
   }
 
@@ -37,21 +40,25 @@ export class TrainingProcessorComponent implements OnInit {
   }
 
   approve(): void {
-    this.training?.approvedWords.push(this.word);
+    this.training?.trainingSet.approved.push(this.word.wordOrigin);
     ++this.curWordIndex;
     if (this.training) {
-      this.word = this.training.words[this.curWordIndex];
+      this.word = this.getCurWord();
     }
     this.isShowInfo = false;
   }
 
   repeat(): void {
-    this.training?.wordsForRepetition.push(this.word);
+    this.training?.trainingSet.failed.push(this.word.wordOrigin);
     ++this.curWordIndex;
     if (this.training) {
-      this.word = this.training.words[this.curWordIndex];
+      this.word = this.getCurWord();
     }
     this.isShowInfo = false;
+  }
+
+  getCurWord(): Word {
+    return this.wordOrigins.get(this.training!.trainingSet.words[this.curWordIndex])!;
   }
 
   showInfo(): void {

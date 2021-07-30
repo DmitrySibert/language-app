@@ -1,88 +1,151 @@
 package com.dsib.language.core.training;
 
-import com.dsib.language.core.dictionary.DictionaryService;
-import com.dsib.language.core.word.RepeatWordEntity;
-import com.dsib.language.core.word.RepeatWordRepository;
-import com.dsib.language.core.word.Word;
+import com.dsib.language.core.progress.domain.ProgressType;
+import com.dsib.language.core.progress.domain.WordProgress;
+import com.dsib.language.core.progress.domain.WordProgressFailProneService;
+import com.dsib.language.core.training.application.TrainingProvider;
+import com.dsib.language.core.training.domain.Training;
+import com.dsib.language.core.training.domain.TrainingRepository;
+import com.dsib.language.core.training.domain.TrainingStatus;
+import com.dsib.language.core.training.domain.TrainingType;
+import com.dsib.language.core.word.application.WordService;
+import com.dsib.language.core.word.domain.Word;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TrainingProviderTest {
 
     @Mock
-    private DictionaryService dictionaryService;
+    WordProgressFailProneService wordProgressFailProneService;
     @Mock
-    private RepeatWordRepository repeatWordRepository;
-
-    private final Word word1 = new Word(
-            "word1", "translate1", new String[]{"info1", "info2"}, new String[]{"tag1", "tag2"}
-    );
-    private final Word word2 = new Word(
-            "word2", "translate2", new String[]{"info1", "info2"}, new String[]{"tag1", "tag2"}
-    );
-    private final RepeatWordEntity repeatWordEntity1 = new RepeatWordEntity("word1");
-    private final RepeatWordEntity repeatWordEntity2 = new RepeatWordEntity("word2");
+    private WordService wordService;
+    @Mock
+    private TrainingRepository trainingRepository;
 
     private TrainingProvider trainingProvider;
 
+    private final Word word1 = new Word(
+            "word1", "translate1", List.of("info1", "info2"), List.of("tag1", "tag2")
+    );
+    private final Word word2 = new Word(
+            "word2", "translate2", List.of("info1", "info2"), List.of("tag1", "tag2")
+    );
+    private final WordProgress wordProgress1 = new WordProgress("word1");
+    private final WordProgress wordProgress2 = new WordProgress("word2");
+
     @BeforeEach
     public void setUp() {
-        trainingProvider = new TrainingProvider(dictionaryService, repeatWordRepository);
+        trainingProvider = new TrainingProvider(trainingRepository, wordService, wordProgressFailProneService);
     }
 
     @Test
     public void testGetTrainingByTags() {
-        when(dictionaryService.getWordsByTags(any(List.class)))
-            .then(args -> {
-                List<Word> words = new LinkedList<>();
-                words.add(word1);
-                words.add(word2);
-                return words;
-            });
+        when(wordService.getByTags(any(List.class)))
+                .then(args -> {
+                    List<Word> words = new LinkedList<>();
+                    words.add(word1);
+                    words.add(word2);
+                    return words;
+                });
+        when(trainingRepository.create(any(Training.class)))
+            .then(args -> args.getArgument(0));
 
-        Training training = trainingProvider.getSimpleTrainingByTags(List.of());
+        Training training = trainingProvider.getTraining(TrainingType.TAGGED, List.of("tag1"), null);
 
-        List<Word> trainingWords = new LinkedList<>();
-        trainingWords.add(training.getCurrent());
-        training.moveNext();
-        trainingWords.add(training.getCurrent());
-
-        assertEquals(2, trainingWords.size());
-        assertTrue(List.of(word1, word2).containsAll(trainingWords));
+        assertEquals(2, training.getTrainingSet().getWords().size());
+        assertEquals(2, training.getSize());
+        assertEquals(TrainingStatus.CREATED, training.getStatus());
+        assertEquals(List.of("tag1"), training.getTags());
+        assertEquals(TrainingType.TAGGED, training.getType());
+        assertNotNull(training.getId());
+        assertNotNull(training.getCreatedAt());
+        assertNull(training.getCompletedAt());
     }
 
     @Test
     public void testGetSimpleRepeatTraining() {
-        when(repeatWordRepository.findAll())
-            .thenReturn(List.of(repeatWordEntity1, repeatWordEntity2));
-        when(dictionaryService.getWordsByOrigin(List.of(repeatWordEntity1.getOrigin(), repeatWordEntity2.getOrigin())))
-            .then(args -> {
-                List<Word> words = new LinkedList<>();
-                words.add(word1);
-                words.add(word2);
-                return words;
-            });
+        when(wordProgressFailProneService.getByType(eq(ProgressType.MOST_FAILED), anyInt()))
+                .thenReturn(List.of(wordProgress1, wordProgress2));
+        when(trainingRepository.create(any(Training.class)))
+                .then(args -> args.getArgument(0));
 
-        Training training = trainingProvider.getSimpleRepeatTraining();
+        Training training = trainingProvider.getTraining(TrainingType.REPEAT, null, 2);
 
-        List<Word> trainingWords = new LinkedList<>();
-        trainingWords.add(training.getCurrent());
-        training.moveNext();
-        trainingWords.add(training.getCurrent());
+        assertEquals(2, training.getTrainingSet().getWords().size());
+        assertEquals(2, training.getSize());
+        assertEquals(TrainingStatus.CREATED, training.getStatus());
+        assertEquals(0, training.getTags().size());
+        assertEquals(TrainingType.REPEAT, training.getType());
+        assertNotNull(training.getId());
+        assertNotNull(training.getCreatedAt());
+        assertNull(training.getCompletedAt());
+    }
+    @Test
+    public void testGetSimpleRepeatTraining_ActualSizeIsLess() {
+        when(wordProgressFailProneService.getByType(eq(ProgressType.MOST_FAILED), anyInt()))
+                .thenReturn(List.of(wordProgress1, wordProgress2));
+        when(trainingRepository.create(any(Training.class)))
+                .then(args -> args.getArgument(0));
 
-        assertEquals(2, trainingWords.size());
-        assertTrue(List.of(word1, word2).containsAll(trainingWords));
+        Training training = trainingProvider.getTraining(TrainingType.REPEAT, null, 10);
+
+        assertEquals(2, training.getTrainingSet().getWords().size());
+        assertEquals(2, training.getSize());
+        assertEquals(TrainingStatus.CREATED, training.getStatus());
+        assertEquals(0, training.getTags().size());
+        assertEquals(TrainingType.REPEAT, training.getType());
+        assertNotNull(training.getId());
+        assertNotNull(training.getCreatedAt());
+        assertNull(training.getCompletedAt());
+    }
+
+    @Test
+    public void testGetSimpleRandomTraining() {
+        when(wordService.getRandom(any(Integer.class)))
+                .thenReturn(Arrays.asList(word1, word2));
+        when(trainingRepository.create(any(Training.class)))
+                .then(args -> args.getArgument(0));
+
+        Training training = trainingProvider.getTraining(TrainingType.RANDOM, null, 2);
+
+        assertEquals(2, training.getTrainingSet().getWords().size());
+        assertEquals(2, training.getSize());
+        assertEquals(TrainingStatus.CREATED, training.getStatus());
+        assertEquals(0, training.getTags().size());
+        assertEquals(TrainingType.RANDOM, training.getType());
+        assertNotNull(training.getId());
+        assertNotNull(training.getCreatedAt());
+        assertNull(training.getCompletedAt());
+    }
+
+    @Test
+    public void testGetSimpleRandomTraining_ActualSizeIsLess() {
+        when(wordService.getRandom(any(Integer.class)))
+                .thenReturn(Arrays.asList(word1, word2));
+        when(trainingRepository.create(any(Training.class)))
+                .then(args -> args.getArgument(0));
+
+        Training training = trainingProvider.getTraining(TrainingType.RANDOM, null, 10);
+
+        assertEquals(2, training.getTrainingSet().getWords().size());
+        assertEquals(2, training.getSize());
+        assertEquals(TrainingStatus.CREATED, training.getStatus());
+        assertEquals(0, training.getTags().size());
+        assertEquals(TrainingType.RANDOM, training.getType());
+        assertNotNull(training.getId());
+        assertNotNull(training.getCreatedAt());
+        assertNull(training.getCompletedAt());
     }
 }

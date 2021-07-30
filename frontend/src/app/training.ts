@@ -1,8 +1,6 @@
-import { Word } from "./word";
+import { TrainingSet } from "./training-set";
 
 export interface Training {
-    words: Word[];
-    curWordIdx: number;
-    wordsForRepetition: Word[];
-    approvedWords: Word[];
+    id: String;
+    trainingSet: TrainingSet;
 }
