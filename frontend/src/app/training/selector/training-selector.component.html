@@ -1,12 +1,32 @@
 <div>
     <h2>Select a training with parameters</h2>
-    <div>
+    <!-- <div>
       <label for="training-type">Type: </label>
       <input id="training-type" [(ngModel)]="type" placeholder="Type"/>
-    </div>
+    </div> -->
     <div>
-        <label for="training-tags">Tags: </label>
-        <input id="training-tags" [(ngModel)]="tags" placeholder="Tags"/>
+        <label for="training-type">Type: </label>
+        <select id="training-type" [(ngModel)]="selectedType" >
+            <option *ngFor="let type of allTypes">{{type}}</option>
+        </select>
+    </div>
+<!--    <div>-->
+<!--        <label for="training-tags">Tags: </label>-->
+<!--        <input id="training-tags" [(ngModel)]="tags">-->
+<!--    </div>-->
+    <div>
+        <label for="training-size">Size: </label>
+        <input id="training-size" [(ngModel)]="size" placeholder="Size"/>
+    </div>
+    <!-- <div>
+        <label for="all-tags">All tags: </label>
+        <textarea id="all-tags" [(ngModel)]="allTags" placeholder="All tags" class="all_tags"></textarea>
+    </div> -->
+    <div>
+        <label>Tags: </label>
+        <select [(ngModel)]="selectedTag" >
+            <option *ngFor="let tag of tagsArray">{{tag}}</option>
+        </select>
     </div>
     <button (click)="start()">Start</button>
     <button (click)="clear()">Clear</button>

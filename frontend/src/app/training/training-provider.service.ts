@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { Training } from '../training';
+import { Word } from "../word";
 
 import { environment } from '../../environments/environment';
 
@@ -12,7 +13,9 @@ export class TrainingProvider {
 
   private API_URL = environment.API_URL;
   private API_TRAINING_URL = 'api/v1/training';
-  private currentTraining: Observable<Training> | null;
+  private API_WORD_ORIGINS_URL = 'api/v1/word';
+  private currentTraining: Training | null;
+  private wordOrigins: Map<string, Word>;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,29 +24,62 @@ export class TrainingProvider {
   constructor(
     private http: HttpClient) {
       this.currentTraining = null;
+      this.wordOrigins = new Map<string, Word>();
       console.log("url: " + this.API_URL);
-      
     }
 
-  loadTraining(tags: string[], type: string): void {
+  loadTraining(tags: string[], type: string, size: number): Promise<Boolean> {
     let params = new HttpParams();
     tags.forEach(tag => {
       params = params.append('tags', tag);
     });
     params = params.append('type', type);
-
-    this.currentTraining = this.http.get<Training>(
+    if (size > 0) {
+      params = params.append('size', size);
+    }
+    return this.http.get<Training>(
       `${this.API_URL}/${this.API_TRAINING_URL}`, {
         params: params
       })
+      .toPromise()
+      .then(
+        res => this.currentTraining = res
+      )
+      .then(res => {
+        let wordOriginsParams = new HttpParams();
+        this.currentTraining?.trainingSet.words.forEach(wordOrigin => {
+          wordOriginsParams = wordOriginsParams.append('origins', wordOrigin);
+        });
+        let wordOriginsList = new Array<Word>();
+        return this.http.get<Word[]>(
+          `${this.API_URL}/${this.API_WORD_ORIGINS_URL}`, {
+            params: wordOriginsParams
+          })
+          .toPromise()
+          .then(res => {
+            wordOriginsList = res;
+            wordOriginsList.forEach(word => {
+              this.wordOrigins.set(word.wordOrigin, word);
+            })
+            return true;
+          })
+      })
   }
 
-  getCurrentTraining(): Observable<Training> | null {
+  getCurrentTraining(): Training | null {
     return this.currentTraining;
   }
 
+  getCurrentTrainingWordOrigins(): Map<string, Word> {
+    return this.wordOrigins;
+  }
+
   completeTraining(training: Training): void {
-      this.http.post(`${this.API_URL}/${this.API_TRAINING_URL}`, training).subscribe();
+      this.http.post(`${this.API_URL}/${this.API_TRAINING_URL}`, {
+        id: training.id,
+        wordsForRepetition: training.trainingSet.failed,
+        approvedWords: training.trainingSet.approved
+      }).subscribe();
   }
 
   /**

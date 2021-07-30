@@ -92,3 +92,6 @@ baseline.json
 deploy/artifactory
 monitoring-deploy/artifactory
 
+#any
+logs
+

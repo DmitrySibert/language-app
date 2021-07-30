@@ -1,0 +1,12 @@
+java_home: "/lib/jvm"
+java_name: "java-11-openjdk-armhf"
+host_user: pi
+artifactory_path: "/home/dmitrii/Projects/language-app/deploy/artifactory"
+
+frontend_src: ../frontend/dist/language-app
+frontend_destination: "/home/{{host_user}}/apps/language/final/language-app"
+backend_src: ../target
+host_app_destination: "/home/{{host_user}}/apps/language"
+app_version: 0.0.1-SNAPSHOT
+app_file_name: "language-{{ app_version }}.jar"
+app_name: language_app

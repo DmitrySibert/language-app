@@ -22,3 +22,8 @@ button:disabled {
     color: #cca;
     cursor: auto;
 }
+
+.all_tags {
+    width:fit-content;
+    height:400px;
+}

@@ -1,0 +1,35 @@
+@startuml
+
+package "Training" {
+  [Training finisher] as TrainingFinisher
+  [Training provider] as TrainingProvider
+  [File Training provider] as FileTrainingProvider
+}
+
+package "Progress" {
+  [Word progress updater] as WordProgressUpdater
+  [Word progress fail prone service] as WordProgressFailProneService
+}
+
+package "Word" {
+  [Word service] as WordService
+  [Dictionary service] as DictionaryService
+}
+
+[WEB Training Client] as WebTClient
+[WEB Dictionary Client] as WebDClient
+
+WebTClient --> TrainingProvider
+WebTClient --> FileTrainingProvider
+WebTClient --> TrainingFinisher
+WebTClient --> WordService
+WebDClient --> DictionaryService
+TrainingProvider --> WordService
+TrainingProvider --> WordProgressFailProneService
+TrainingFinisher ..> WordProgressUpdater: TrainingDomainEvent
+DictionaryService --> WordService
+WordProgressUpdater --> TrainingProvider
+FileTrainingProvider --> TrainingProvider
+FileTrainingProvider --> WordService
+
+@enduml

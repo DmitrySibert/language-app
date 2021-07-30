@@ -1,0 +1,43 @@
+@startuml
+class DictionaryController {
+  - DictionaryService dictionaryService
+
+  + uploadFile(MultipartFile dictionary): String
+  + uploadFiles(MultipartFile[] dictionaryFiles): String
+}
+
+class DictionaryService {
+   - WordService wordService
+
+   + updateDictionary(InputStream csv): void
+   + updateDictionary(List<InputStream> csvs): void
+}
+
+class WordController {
+  - WordService wordService
+
+  + getWords(List<String> origins): <List<Word>
+}
+
+class WordService {
+   - WordRepository wordRepository
+
+   + getByTags(List<String> tags): List<Word>
+   + getByOrigin(List<String> origins): List<Word>
+   + getRandom(int size)): List<Word>
+}
+
+class WordRepository {
+   + CRUD
+   + upsert(List<WordEntity> words): int[]
+   + findByTags(List<String> tags): List<WordEntity>
+}
+
+class Word {
+    - wordOrigin: String
+    - wordTranslate: String
+    - wordInfo: List<String>
+    - tags: List<String>
+}
+
+@enduml
