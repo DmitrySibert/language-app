@@ -1,0 +1,8 @@
+---
+- name: deploy metric infrastructure
+  hosts: develop_metrics
+  remote_user: irina
+  become: yes
+  roles:
+    - role: prometheus
+    - role: prometheus_node_exporter

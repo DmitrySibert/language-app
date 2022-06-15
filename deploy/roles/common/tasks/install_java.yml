@@ -1,0 +1,22 @@
+- name: Send java binary
+  copy:
+    src: "{{ artifactory_path }}/{{ java_name }}.tar.gz"
+    dest: "{{ java_home }}/{{ java_name }}.tar.gz"
+    mode: '666'
+
+- name: Unpack java binary
+  become: true
+  unarchive:
+    src: "{{ java_home }}/{{ java_name }}.tar.gz"
+    dest: "{{ java_home }}/"
+    creates: "{{ java_home }}/{{ java_name }}"
+    mode: 0755
+    remote_src: yes
+
+- name: Set JAVA_HOME
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^JAVA_HOME'
+    line: 'JAVA_HOME={{ java_home }}/{{ java_name }}'

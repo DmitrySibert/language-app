@@ -1,0 +1,13 @@
+target_user: user
+target_group: user
+
+java_home: "/usr/lib/jvm"
+
+elastic_remote_dest: "/opt/elastic"
+elastic_name: "elasticsearch-7.17.1"
+
+logstash_remote_dest: "/opt/elastic"
+logstash_name: "logstash-7.17.1"
+
+kibana_remote_dest: "/opt/kibana"
+kibana_name: "kibana-7.17.3-linux-x86_64"

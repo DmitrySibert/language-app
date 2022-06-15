@@ -1,0 +1,58 @@
+- name: Create target directory
+  file:
+    path: "{{ elastic_remote_dest }}/src/"
+    state: directory
+    owner: user
+    group: user
+    mode: '766'
+
+- name: Send elasticsearch binary
+  copy:
+    src: "/home/dmitrii/Projects/spring-boot-sample/ops/artifactory/{{ elastic_name }}.tar.gz"
+    dest: "{{ elastic_remote_dest }}/src/{{ elastic_name }}.tar.gz"
+    owner: user
+    group: user
+    mode: '766'
+
+- name: Unpack elasticsearch binary
+  unarchive:
+    src: "{{ elastic_remote_dest }}/src/{{ elastic_name }}.tar.gz"
+    dest: "{{ elastic_remote_dest }}"
+    creates: "{{ elastic_remote_dest }}/{{ elastic_name }}"
+    owner: user
+    group: user
+    mode: '766'
+    remote_src: yes
+
+- name: Send elasticsearch configurations
+  template:
+    src: "elastic/elasticsearch.yml.j2"
+    dest: "{{ elastic_remote_dest }}/{{ elastic_name }}/config/elasticsearch.yml"
+    owner: user
+    group: user
+    mode: '775'
+
+- name: Set ES_JAVA_HOME
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^ES_JAVA_HOME'
+    line: 'ES_JAVA_HOME=/usr/lib/jvm/jdk-14.0.2'
+
+- name: Add elastic_search service config
+  template:
+    src: "elastic/elastic_search.service.j2"
+    dest: "/etc/systemd/system/elastic_search.service"
+
+- name: Add elastic_search related config[vm.max_map_count]
+  become: yes
+  sysctl:
+    name: vm.max_map_count
+    value: '262144'
+
+- name: Start elastic_search service
+  service:
+    enabled: true
+    name: "elastic_search"
+    state: started

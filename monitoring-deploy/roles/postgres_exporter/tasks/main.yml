@@ -1,0 +1,24 @@
+- name: "Ensures {{ exporters_host_dest }}/postgres-exporter dir exists"
+  file:
+    path: "{{ exporters_host_dest }}/postgres-exporter"
+    state: directory
+
+- name: Copy file with owner and permissions postgres_exporter
+  ansible.builtin.copy:
+    src: "{{ artifactory_path }}/prometheus-postgres-exporter"
+    dest: "{{ exporters_host_dest }}/postgres-exporter/prometheus-postgres-exporter"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '775'
+
+- name: Add postgres_exporter service config
+  template:
+    src: "postgres_exporter.service.j2"
+    dest: "/etc/systemd/system/postgres_exporter.service"
+
+- name: Start postgres_exporter service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "postgres_exporter"
+    state: started

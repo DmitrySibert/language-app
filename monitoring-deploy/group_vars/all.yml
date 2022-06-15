@@ -1,0 +1,10 @@
+app_host_address: 192.168.56.101
+elk_host_address: 192.168.56.102
+metrics_host_address: 192.168.56.103
+
+nginx_log_exporter_port: 4040
+postgres_exporter_port: 9187
+prometheus_node_exporter_port: 9100
+
+artifactory_path: /home/dmitrii/Projects/language-app/monitoring-deploy/artifactory
+exporters_host_dest: /home/irina/Documents/Irina

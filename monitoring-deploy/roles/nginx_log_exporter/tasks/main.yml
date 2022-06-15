@@ -1,0 +1,32 @@
+- name: "Ensures {{ exporters_host_dest }}/nginx-exporter dir exists"
+  file:
+    path: "{{ exporters_host_dest }}/nginx-exporter"
+    state: directory
+
+- name: Copy file with owner and permissions nginx_log_exporter
+  copy:
+    src: "{{ artifactory_path }}/prometheus-nginxlog-exporter"
+    dest: "{{ exporters_host_dest }}/nginx-exporter/prometheus-nginxlog-exporter"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '775'
+
+- name: Copy file with owner and permissions nginx_log_exporter
+  template:
+    src: "nginxlog_exporter.yml"
+    dest: "{{ exporters_host_dest }}/nginx-exporter/nginxlog_exporter.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '666'
+
+- name: Add nginx_log_exporter service config
+  template:
+    src: "nginx_log_exporter.service.j2"
+    dest: "/etc/systemd/system/nginx_log_exporter.service"
+
+- name: Start nginx_log_exporter service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "nginx_log_exporter"
+    state: started

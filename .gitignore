@@ -88,3 +88,7 @@ baseline.json
 # Husky
 .husky/_
 
+#local artifactory
+deploy/artifactory
+monitoring-deploy/artifactory
+

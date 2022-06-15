@@ -1,0 +1,13 @@
+[Unit]
+Description=Kibana
+Documentation=https://www.elastic.co/guide/en/kibana/7.17/index.html
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=user
+ExecStart={{ kibana_remote_dest }}/{{ kibana_name }}/bin/kibana
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
