@@ -1,0 +1,8 @@
+---
+- name: deploy elk
+  hosts: develop_elk
+  remote_user: user
+  become: yes
+  roles:
+    - role: elk
+    - role: prometheus_node_exporter

@@ -1,0 +1,53 @@
+- name: Create target directory
+  file:
+    path: "{{ filebeat_remote_dest }}/src/"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Send filebeat binary
+  copy:
+    src: "{{ artifactory_path }}/{{ filebeat_name }}.tar.gz"
+    dest: "{{ filebeat_remote_dest }}/src/{{ filebeat_name }}.tar.gz"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Unpack filebeat binary
+  unarchive:
+    src: "{{ filebeat_remote_dest }}/src/{{ filebeat_name }}.tar.gz"
+    dest: "{{ filebeat_remote_dest }}"
+    creates: "{{ filebeat_remote_dest }}/{{ filebeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+    remote_src: yes
+
+- name: Fix permissions on the extract directory and sub-directories
+  file:
+    path: "{{ filebeat_remote_dest }}/{{ filebeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+    recurse: yes
+
+- name: Send filebeat configurations
+  template:
+    src: "filebeat.yml.j2"
+    dest: "{{ filebeat_remote_dest }}/{{ filebeat_name }}/filebeat.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Add filebeat service config
+  template:
+    src: "filebeat.service.j2"
+    dest: "/etc/systemd/system/filebeat.service"
+
+- name: Start filebeat service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "filebeat"
+    state: started

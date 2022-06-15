@@ -1,0 +1,10 @@
+---
+- name: deploy host exporters
+  hosts: develop_host
+  remote_user: user
+  become: yes
+  roles:
+    - role: nginx_log_exporter
+    - role: postgres_exporter
+    - role: prometheus_node_exporter
+    - role: logs_beat

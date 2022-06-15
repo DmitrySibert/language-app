@@ -1,0 +1,53 @@
+- name: Create target directory
+  file:
+    path: "{{ kibana_remote_dest }}/src/"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '775'
+
+- name: Send kibana binary
+  copy:
+    src: "/home/dmitrii/Projects/spring-boot-sample/ops/artifactory/{{ kibana_name }}.tar.gz"
+    dest: "{{ kibana_remote_dest }}/src/{{ kibana_name }}.tar.gz"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '775'
+
+- name: Unpack kibana binary
+  unarchive:
+    src: "{{ kibana_remote_dest }}/src/{{ kibana_name }}.tar.gz"
+    dest: "{{ kibana_remote_dest }}"
+    creates: "{{ kibana_remote_dest }}/{{ kibana_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+    remote_src: yes
+
+- name: Fix permissions on the extract directory and sub-directories
+  file:
+    path: "{{ kibana_remote_dest }}/{{ kibana_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+    recurse: yes
+
+- name: Send kibana configurations
+  template:
+    src: "kibana/kibana.yml.j2"
+    dest: "{{ kibana_remote_dest }}/{{ kibana_name }}/config/kibana.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+
+- name: Add kibana service config
+  template:
+    src: "kibana/kibana.service.j2"
+    dest: "/etc/systemd/system/kibana.service"
+
+- name: Start kibana service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "kibana"
+    state: started

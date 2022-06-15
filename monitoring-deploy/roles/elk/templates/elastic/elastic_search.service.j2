@@ -1,0 +1,15 @@
+[Unit]
+Description=Elastic search service
+
+[Service]
+User=user
+Group=user
+Type=simple
+ExecStart={{elastic_remote_dest}}/{{ elastic_name }}/bin/elasticsearch
+SuccessExitStatus=143
+TimeoutStopSec=60
+Restart=on-failure
+RestartSec=50
+
+[Install]
+WantedBy=multi-user.target
