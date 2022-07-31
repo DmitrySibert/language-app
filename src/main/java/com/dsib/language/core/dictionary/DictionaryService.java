@@ -11,6 +11,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.*;
 
+/**
+ * Class parse dictionary files and requests to save them
+ */
 @Service
 public class DictionaryService {
 

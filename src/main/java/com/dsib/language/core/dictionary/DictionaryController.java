@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * Dictionary rest controller.
+ *
+ * Provide endpoint to upload dictionary files
  */
 @RestController
 @RequestMapping(value = "/api/v1/dictionary")
