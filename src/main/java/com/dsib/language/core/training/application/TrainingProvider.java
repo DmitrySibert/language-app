@@ -1,9 +1,9 @@
 package com.dsib.language.core.training.application;
 
-import com.dsib.language.core.training.Training;
-import com.dsib.language.core.training.TrainingRepository;
-import com.dsib.language.core.training.TrainingService;
-import com.dsib.language.core.training.TrainingType;
+import com.dsib.language.core.training.domain.Training;
+import com.dsib.language.core.training.domain.TrainingRepository;
+import com.dsib.language.core.training.domain.TrainingService;
+import com.dsib.language.core.training.domain.TrainingType;
 
 import java.util.List;
 

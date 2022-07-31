@@ -1,12 +1,12 @@
 package com.dsib.language.core.training.application;
 
-import com.dsib.language.core.infrastructure.DomainEventsBus;
-import com.dsib.language.core.training.Training;
-import com.dsib.language.core.training.TrainingDomainEvent;
-import com.dsib.language.core.training.TrainingRepository;
-import com.dsib.language.core.training.TrainingSession;
+import com.dsib.language.core.common.event.DomainEventsBus;
+import com.dsib.language.core.training.domain.Training;
+import com.dsib.language.core.training.domain.TrainingDomainEvent;
+import com.dsib.language.core.training.domain.TrainingRepository;
+import com.dsib.language.core.training.domain.TrainingSession;
 import com.dsib.language.core.training.presentation.FinishTrainingDto;
-import com.dsib.language.core.word.WordService;
+import com.dsib.language.core.word.domain.WordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 

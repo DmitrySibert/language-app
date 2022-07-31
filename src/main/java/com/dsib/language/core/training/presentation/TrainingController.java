@@ -1,8 +1,8 @@
 package com.dsib.language.core.training.presentation;
 
-import com.dsib.language.core.training.Training;
+import com.dsib.language.core.training.domain.Training;
 import com.dsib.language.core.training.application.TrainingFinisher;
-import com.dsib.language.core.training.TrainingType;
+import com.dsib.language.core.training.domain.TrainingType;
 import com.dsib.language.core.training.application.TrainingProvider;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;

@@ -1,9 +1,12 @@
 package com.dsib.language.core.progress;
 
-import com.dsib.language.core.infrastructure.DomainEventsBus;
-import com.dsib.language.core.infrastructure.SimpleDomainEventsBus;
-import com.dsib.language.core.training.*;
-import com.dsib.language.core.word.Word;
+import com.dsib.language.core.common.event.DomainEventsBus;
+import com.dsib.language.core.common.event.SimpleDomainEventsBus;
+import com.dsib.language.core.progress.application.WordProgressUpdater;
+import com.dsib.language.core.progress.domain.WordProgress;
+import com.dsib.language.core.progress.domain.WordProgressRepository;
+import com.dsib.language.core.training.domain.*;
+import com.dsib.language.core.word.domain.Word;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

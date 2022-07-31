@@ -1,10 +1,10 @@
 //package com.dsib.language.core.training;
 //
-//import com.dsib.language.core.progress.ProgressType;
-//import com.dsib.language.core.progress.WordProgress;
-//import com.dsib.language.core.progress.WordProgressFailProneService;
-//import com.dsib.language.core.word.Word;
-//import com.dsib.language.core.word.WordService;
+//import com.dsib.language.core.progress.domain.ProgressType;
+//import com.dsib.language.core.progress.domain.WordProgress;
+//import com.dsib.language.core.progress.domain.WordProgressFailProneService;
+//import com.dsib.language.core.word.domain.Word;
+//import com.dsib.language.core.word.domain.WordService;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;

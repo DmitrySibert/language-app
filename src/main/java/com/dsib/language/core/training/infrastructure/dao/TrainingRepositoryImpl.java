@@ -1,7 +1,7 @@
 package com.dsib.language.core.training.infrastructure.dao;
 
-import com.dsib.language.core.training.Training;
-import com.dsib.language.core.training.TrainingRepository;
+import com.dsib.language.core.training.domain.Training;
+import com.dsib.language.core.training.domain.TrainingRepository;
 import com.dsib.language.core.training.infrastructure.dao.spring.TrainingSpringRepository;
 import org.springframework.stereotype.Repository;
 
