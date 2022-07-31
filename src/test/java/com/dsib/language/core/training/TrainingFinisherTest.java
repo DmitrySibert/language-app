@@ -1,10 +1,11 @@
 package com.dsib.language.core.training;
 
-import com.dsib.language.core.infrastructure.DomainEvent;
-import com.dsib.language.core.infrastructure.DomainEventsBus;
+import com.dsib.language.core.common.event.DomainEvent;
+import com.dsib.language.core.common.event.DomainEventsBus;
 import com.dsib.language.core.training.application.TrainingFinisher;
+import com.dsib.language.core.training.domain.*;
 import com.dsib.language.core.training.presentation.FinishTrainingDto;
-import com.dsib.language.core.word.WordService;
+import com.dsib.language.core.word.domain.WordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

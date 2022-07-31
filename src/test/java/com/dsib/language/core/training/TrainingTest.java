@@ -1,5 +1,8 @@
 package com.dsib.language.core.training;
 
+import com.dsib.language.core.training.domain.Training;
+import com.dsib.language.core.training.domain.TrainingStatus;
+import com.dsib.language.core.training.domain.TrainingType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

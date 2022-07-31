@@ -1,6 +1,6 @@
 package com.dsib.language.core.training.infrastructure.dao;
 
-import com.dsib.language.core.training.Training;
+import com.dsib.language.core.training.domain.Training;
 
 import java.util.LinkedList;
 import java.util.List;

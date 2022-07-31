@@ -1,7 +1,7 @@
 package com.dsib.language.core.training.infrastructure.dao;
 
-import com.dsib.language.core.training.TrainingStatus;
-import com.dsib.language.core.training.TrainingType;
+import com.dsib.language.core.training.domain.TrainingStatus;
+import com.dsib.language.core.training.domain.TrainingType;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
