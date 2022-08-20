@@ -1,4 +1,4 @@
-package com.dsib.language.core.training.application.file;
+package com.dsib.language.core.training.presentation.file;
 
 import lombok.Getter;
 

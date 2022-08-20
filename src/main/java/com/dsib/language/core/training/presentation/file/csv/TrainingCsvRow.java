@@ -1,4 +1,4 @@
-package com.dsib.language.core.training.application.file.csv;
+package com.dsib.language.core.training.presentation.file.csv;
 
 import com.opencsv.bean.CsvBindByPosition;
 import lombok.Getter;

@@ -2,37 +2,37 @@
 class DictionaryController {
   - DictionaryService dictionaryService
 
-  + String uploadFile(MultipartFile dictionary)
-  + String uploadFiles(MultipartFile[] dictionaryFiles)
+  + uploadFile(MultipartFile dictionary): String
+  + uploadFiles(MultipartFile[] dictionaryFiles): String
 }
 
 class DictionaryService {
    - WordService wordService
 
-   + void updateDictionary(InputStream csv)
-   + void updateDictionary(List<InputStream> csvs)
+   + updateDictionary(InputStream csv): void
+   + updateDictionary(List<InputStream> csvs): void
 }
 
 class WordService {
    - WordRepository wordRepository
 
-   + List<Word> getByTags(List<String> tags)
-   + List<Word> getByOrigin(List<String> origins)
-   + List<Word> getAll()
-   + void upsert(List<Word> words)
+   + getByTags(List<String> tags): List<Word>
+   + getByOrigin(List<String> origins): List<Word>
+   + getAll(): List<Word>
+   + upsert(List<Word> words): void
 }
 
 class WordRepository {
    + CRUD
-   + int[] upsert(List<WordEntity> words)
-   + List<WordEntity> findByTags(List<String> tags)
+   + upsert(List<WordEntity> words): int[]
+   + findByTags(List<String> tags): List<WordEntity>
 }
 
 class Word {
-    - String wordOrigin
-    - String wordTranslate
-    - List<String> wordInfo
-    - List<String> tags
+    - wordOrigin: String
+    - wordTranslate: String
+    - wordInfo: List<String>
+    - tags: List<String>
 }
 
 @enduml

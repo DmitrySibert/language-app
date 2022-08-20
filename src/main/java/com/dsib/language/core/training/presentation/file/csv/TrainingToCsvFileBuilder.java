@@ -1,36 +1,26 @@
-package com.dsib.language.core.training.application.file;
+package com.dsib.language.core.training.presentation.file.csv;
 
+import com.dsib.language.core.training.presentation.file.FileTraining;
 import com.dsib.language.core.training.domain.Training;
-import com.dsib.language.core.training.domain.TrainingType;
-import com.dsib.language.core.training.application.TrainingProvider;
-import com.dsib.language.core.training.application.file.csv.CsvRow;
-import com.dsib.language.core.training.application.file.csv.TrainingCsvRow;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service
-public class FileTrainingProvider {
+public class TrainingToCsvFileBuilder {
 
-    private static final String TRAINING_FILE_NAME = "training";
     private static final String TRAINING_FILE_EXTENSION_CSV = "csv";
 
-    private final TrainingProvider trainingProvider;
-
-    public FileTrainingProvider(TrainingProvider trainingProvider) {
-        this.trainingProvider = trainingProvider;
-    }
-
-    public FileTraining getSimpleTrainingByTags(List<String> tags)
+    public FileTraining build(String filename, Training training)
       throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
-        Training training = trainingProvider.getTraining(TrainingType.TAGGED, tags, null);
         try (
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             OutputStreamWriter writer = new OutputStreamWriter(baos)
@@ -49,7 +39,7 @@ public class FileTrainingProvider {
 
             return new FileTraining(
                     new ByteArrayInputStream(baos.toByteArray()), baos.size(),
-                    TRAINING_FILE_NAME, TRAINING_FILE_EXTENSION_CSV
+                    filename, TRAINING_FILE_EXTENSION_CSV
             );
         }
     }
