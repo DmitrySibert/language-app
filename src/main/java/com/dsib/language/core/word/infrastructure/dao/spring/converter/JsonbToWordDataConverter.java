@@ -1,4 +1,4 @@
-package com.dsib.language.core.word.infrastructure.dao.converter;
+package com.dsib.language.core.word.infrastructure.dao.spring.converter;
 
 import com.dsib.language.core.word.infrastructure.dao.WordData;
 import com.fasterxml.jackson.core.JsonProcessingException;

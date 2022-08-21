@@ -1,5 +1,6 @@
-package com.dsib.language.core.word.domain;
+package com.dsib.language.core.word.infrastructure.dao;
 
+import com.dsib.language.core.word.domain.Word;
 import com.dsib.language.core.word.infrastructure.dao.WordEntity;
 
 import java.util.LinkedList;

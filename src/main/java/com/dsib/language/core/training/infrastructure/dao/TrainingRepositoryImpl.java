@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private TrainingSpringRepository springRepository;
+    private final TrainingSpringRepository springRepository;
     private final TrainingEntityMapper entityMapper;
 
     public TrainingRepositoryImpl(TrainingSpringRepository springRepository) {

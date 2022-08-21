@@ -1,7 +1,8 @@
-package com.dsib.language.core.word.infrastructure.dao;
+package com.dsib.language.core.word.infrastructure.dao.spring;
 
-import com.dsib.language.core.word.infrastructure.dao.converter.JsonbToWordDataConverter;
-import com.dsib.language.core.word.infrastructure.dao.converter.WordDataToJsonbConverter;
+import com.dsib.language.core.word.infrastructure.dao.WordEntity;
+import com.dsib.language.core.word.infrastructure.dao.spring.converter.JsonbToWordDataConverter;
+import com.dsib.language.core.word.infrastructure.dao.spring.converter.WordDataToJsonbConverter;
 import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,13 +12,13 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class WordRepositoryExtensionImpl implements WordRepositoryExtension {
+public class WordSpringRepositoryExtensionImpl implements WordSpringRepositoryExtension {
 
     private final JdbcTemplate jdbcTemplate;
     private final JsonbToWordDataConverter jsonbToWordDataConverter;
     private final WordDataToJsonbConverter wordDataToJsonbConverter;
 
-    public WordRepositoryExtensionImpl(
+    public WordSpringRepositoryExtensionImpl(
             JdbcTemplate jdbcTemplate,
             JsonbToWordDataConverter jsonbToWordDataConverter,
             WordDataToJsonbConverter wordDataToJsonbConverter

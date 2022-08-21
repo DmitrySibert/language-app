@@ -1,6 +1,6 @@
 package com.dsib.language.core.word.presentation.dictionary;
 
-import com.dsib.language.core.word.domain.dictionary.DictionaryService;
+import com.dsib.language.core.word.application.dictionary.DictionaryService;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.http.HttpStatus;

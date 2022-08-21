@@ -1,4 +1,4 @@
-package com.dsib.language.core.word.infrastructure.dao.converter;
+package com.dsib.language.core.word.infrastructure.dao.spring.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

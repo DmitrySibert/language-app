@@ -1,4 +1,4 @@
-package com.dsib.language.core.word.domain.dictionary;
+package com.dsib.language.core.word.application.dictionary;
 
 import com.dsib.language.core.word.domain.WordService;
 import com.dsib.language.core.word.domain.Word;

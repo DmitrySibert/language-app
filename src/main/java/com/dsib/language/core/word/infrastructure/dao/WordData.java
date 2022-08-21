@@ -7,9 +7,6 @@ public class WordData {
     private List<String> wordInfo;
     private List<String> tags;
 
-    public WordData() {
-    }
-
     public WordData(String translate, List<String> wordInfo, List<String> tags) {
         this.translate = translate;
         this.wordInfo = wordInfo;
