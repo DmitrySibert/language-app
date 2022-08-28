@@ -7,36 +7,36 @@ import java.util.List;
 
 public class TrainingEntityMapper {
 
-    public Training fromEntity(TrainingEntity trainingEntity) {
-        Training training = new Training(
-                trainingEntity.getId(), trainingEntity.getStatus(), trainingEntity.getType(),
-                trainingEntity.getSize(), trainingEntity.getTags(), trainingEntity.getCreatedAt()
-        );
-        if (null != trainingEntity.getCompletedAt()) {
-            training.setCompletedAt(trainingEntity.getCompletedAt());
-        }
-        return training;
+  public Training fromEntity(TrainingEntity trainingEntity) {
+    Training training = new Training(
+      trainingEntity.getId(), trainingEntity.getStatus(), trainingEntity.getType(),
+      trainingEntity.getSize(), trainingEntity.getTags(), trainingEntity.getCreatedAt(), trainingEntity.getOutcome()
+    );
+    if (null != trainingEntity.getCompletedAt()) {
+      training.setCompletedAt(trainingEntity.getCompletedAt());
     }
+    return training;
+  }
 
-    public List<Training> fromEntity(Iterable<TrainingEntity> trainingEntities) {
+  public List<Training> fromEntity(Iterable<TrainingEntity> trainingEntities) {
 
-        List<Training> trainings = new LinkedList<>();
-        trainingEntities.forEach(trainingEntity -> trainings.add(fromEntity(trainingEntity)));
+    List<Training> trainings = new LinkedList<>();
+    trainingEntities.forEach(trainingEntity -> trainings.add(fromEntity(trainingEntity)));
 
-        return trainings;
-    }
+    return trainings;
+  }
 
-    public TrainingEntity toEntity(Training training) {
-        return new TrainingEntity(
-                training.getId(), training.getStatus(), training.getType(), training.getSize(),
-                training.getTags(), training.getCreatedAt(), training.getCompletedAt(), false
-        );
-    }
+  public TrainingEntity toEntity(Training training) {
+    return new TrainingEntity(
+      training.getId(), training.getStatus(), training.getType(), training.getSize(),
+      training.getTags(), training.getCreatedAt(), training.getCompletedAt(), training.getSet(),false
+    );
+  }
 
-    public TrainingEntity toNewEntity(Training training) {
-        return new TrainingEntity(
-                training.getId(), training.getStatus(), training.getType(), training.getSize(),
-                training.getTags(), training.getCreatedAt(), training.getCompletedAt(), true
-        );
-    }
+  public TrainingEntity toNewEntity(Training training) {
+    return new TrainingEntity(
+      training.getId(), training.getStatus(), training.getType(), training.getSize(),
+      training.getTags(), training.getCreatedAt(), training.getCompletedAt(), training.getSet(), true
+    );
+  }
 }

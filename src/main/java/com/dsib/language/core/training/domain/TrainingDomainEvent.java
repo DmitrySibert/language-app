@@ -9,13 +9,15 @@ public class TrainingDomainEvent extends DomainEvent {
 
     private static final String NAME = "TrainingDomainEvent";
 
-    //TODO: get rid of domain model in Event
     @Getter
-    private final Training training;
+    private final String entityId;
+    @Getter
+    private final TrainingStatus status;
 
-    public TrainingDomainEvent(Training training) {
+    public TrainingDomainEvent(String entityId, TrainingStatus status) {
         super(NAME);
-        assertNotNull("training", training);
-        this.training = training;
+        assertNotNull("entityId", entityId);
+        this.entityId = entityId;
+        this.status = status;
     }
 }

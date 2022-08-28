@@ -1,7 +1,8 @@
 package com.dsib.language.core.word.application.dictionary;
 
-import com.dsib.language.core.word.domain.WordService;
+import com.dsib.language.core.word.application.WordService;
 import com.dsib.language.core.word.domain.Word;
+import com.dsib.language.core.word.domain.WordRepository;
 import com.opencsv.CSVReader;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,10 @@ import java.util.*;
 @Service
 public class DictionaryService {
 
-    private final WordService wordService;
+    private final WordRepository wordRepository;
 
-    public DictionaryService(WordService wordService) {
-        this.wordService = wordService;
+    public DictionaryService(WordRepository wordRepository) {
+        this.wordRepository = wordRepository;
     }
 
     private List<Word> readAllWords(Reader reader) throws IOException {
@@ -45,7 +46,7 @@ public class DictionaryService {
 
     public void updateDictionary(InputStream csv) {
         try (Reader csvReader = new InputStreamReader(csv)) {
-            wordService.upsert(readAllWords(csvReader));
+            wordRepository.upsert(readAllWords(csvReader));
         } catch (Exception e) {
             throw new RuntimeException("Dictionary service: update dictionary from file error:", e);
         }

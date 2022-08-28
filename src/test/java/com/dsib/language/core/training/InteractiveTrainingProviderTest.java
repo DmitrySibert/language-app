@@ -4,7 +4,7 @@
 //import com.dsib.language.core.progress.domain.WordProgress;
 //import com.dsib.language.core.progress.domain.WordProgressFailProneService;
 //import com.dsib.language.core.word.domain.Word;
-//import com.dsib.language.core.word.domain.WordService;
+//import com.dsib.language.core.word.application.WordService;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;

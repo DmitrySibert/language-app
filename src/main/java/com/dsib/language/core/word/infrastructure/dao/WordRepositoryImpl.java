@@ -5,6 +5,7 @@ import com.dsib.language.core.word.domain.WordRepository;
 import com.dsib.language.core.word.infrastructure.dao.spring.WordSpringRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,12 @@ public class WordRepositoryImpl implements WordRepository {
   }
 
   @Override
-  public List<Word> getAll() {
-    return WordEntityMapper.fromEntity(wordSpringRepository.findAll());
+  public List<Word> getRandom(int size) {
+    //TODO: SELECT * FROM big TABLESAMPLE SYSTEM_ROWS(1000);
+    List<Word> words = WordEntityMapper.fromEntity(wordSpringRepository.findAll());
+    int actualSize = Math.min(words.size(), size);
+    Collections.shuffle(words);
+    return words.subList(0, actualSize);
   }
 
   @Override

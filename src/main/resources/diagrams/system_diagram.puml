@@ -3,7 +3,7 @@
 package "Training" {
   [Training finisher] as TrainingFinisher
   [Training provider] as TrainingProvider
-  [Training service] as TrainingService
+  [File Training provider] as FileTrainingProvider
 }
 
 package "Progress" {
@@ -16,16 +16,20 @@ package "Word" {
   [Dictionary service] as DictionaryService
 }
 
-[WEB Client] as WebClient
+[WEB Training Client] as WebTClient
+[WEB Dictionary Client] as WebDClient
 
-WebClient --> TrainingProvider
-WebClient --> TrainingFinisher
-WebClient --> DictionaryService
-TrainingProvider --> TrainingService
-TrainingService --> WordProgressFailProneService
-TrainingService --> WordService
-TrainingFinisher ..> WordProgressUpdater
-TrainingFinisher --> WordService
+WebTClient --> TrainingProvider
+WebTClient --> FileTrainingProvider
+WebTClient --> TrainingFinisher
+WebTClient --> WordService
+WebDClient --> DictionaryService
+TrainingProvider --> WordService
+TrainingProvider --> WordProgressFailProneService
+TrainingFinisher ..> WordProgressUpdater: TrainingDomainEvent
 DictionaryService --> WordService
+WordProgressUpdater --> TrainingProvider
+FileTrainingProvider --> TrainingProvider
+FileTrainingProvider --> WordService
 
 @enduml

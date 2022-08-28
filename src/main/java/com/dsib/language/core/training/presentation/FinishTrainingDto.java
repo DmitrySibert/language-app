@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class FinishTrainingDto {
     private String id;
-    private List<String> words;
     private List<String> wordsForRepetition;
     private List<String> approvedWords;
 }
