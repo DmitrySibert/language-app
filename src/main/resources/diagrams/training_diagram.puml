@@ -14,18 +14,12 @@ package Domain {
       + complete(): TrainingDomainEvent
   }
 
-  class TrainingSession {
+  class TrainingSet {
       - words: List<Word>
-      - wordsForRepetition: List<Word>
-      - approvedWords: List<Word>
+      - failed: List<Word>
+      - approved: List<Word>
 
       + shuffle(): void
-  }
-
-  class TrainingService {
-      + getSimpleTrainingByTags(List<String> tags): Training
-      + getSimpleRandomTraining(int size): Training
-      + getSimpleRepeatTraining(int size): Training
   }
 
   class TrainingDomainEvent {
@@ -44,6 +38,17 @@ package Application {
 
   class TrainingProvider {
     + getTraining(TrainingType type, List<String> tags, Integer size): Training
+  }
+
+  class FileTrainingProvider {
+    + build(List<String> tags): FileTraining
+  }
+
+  class FileTraining {
+    - file: InputStream
+    - name: String
+    - fileSize: int
+    - fileExtension: String
   }
 }
 
@@ -74,28 +79,17 @@ package Presentation {
       - wordsForRepetition: List<String>
       - approvedWords: List<String>
   }
-
-  class FileTraining {
-    - file: InputStream
-    - name: String
-    - fileSize: int
-    - fileExtension: String
-  }
-
-  class TrainingToCsvFileBuilder{
-    + build(String name, Training training): FileTraining
-  }
 }
 
-TrainingProvider o-- TrainingService
 TrainingProvider o-- TrainingRepository
 TrainingFinisher o-- TrainingRepository
 TrainingRepositoryImpl --|> TrainingRepository
 TrainingRepositoryImpl --|> TrainingSpringRepository
 TrainingRepositoryImpl o-- TrainingEntityMapper
-FileTrainingController o-- TrainingProvider
-FileTrainingController o-- TrainingToCsvFileBuilder
+FileTrainingController o-- FileTrainingProvider
+FileTrainingProvider o-- TrainingProvider
 TrainingController o-- TrainingProvider
-Training *-- TrainingSession
+TrainingController o-- TrainingFinisher
+Training *-- TrainingSet
 
 @enduml

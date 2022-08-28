@@ -1,9 +1,7 @@
 package com.dsib.language.core.training.presentation.file;
 
-import com.dsib.language.core.training.application.TrainingProvider;
-import com.dsib.language.core.training.domain.Training;
-import com.dsib.language.core.training.domain.TrainingType;
-import com.dsib.language.core.training.presentation.file.csv.TrainingToCsvFileBuilder;
+import com.dsib.language.core.training.application.file.FileTraining;
+import com.dsib.language.core.training.application.file.FileTrainingProvider;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import io.swagger.annotations.Info;
@@ -32,22 +30,17 @@ import java.util.List;
 )
 public class FileTrainingController {
 
-  private static final String TRAINING_FILE_NAME = "training";
+  private final FileTrainingProvider fileTrainingProvider;
 
-  private final TrainingProvider trainingProvider;
-  private final TrainingToCsvFileBuilder trainingToCsvFileBuilder;
-
-  public FileTrainingController(TrainingProvider trainingProvider) {
-    this.trainingProvider = trainingProvider;
-    trainingToCsvFileBuilder = new TrainingToCsvFileBuilder();
+  public FileTrainingController(FileTrainingProvider fileTrainingProvider) {
+    this.fileTrainingProvider = fileTrainingProvider;
   }
 
   @GetMapping("/download")
   public ResponseEntity<Resource> getTraining(@RequestParam List<String> tags)
     throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 
-    Training training = trainingProvider.getTraining(TrainingType.TAGGED, tags, null);
-    FileTraining fileTraining = trainingToCsvFileBuilder.build(TRAINING_FILE_NAME, training);
+    FileTraining fileTraining = fileTrainingProvider.build(tags);
     InputStreamResource inputStreamResource = new InputStreamResource(fileTraining.getFile());
 
     return ResponseEntity.ok()

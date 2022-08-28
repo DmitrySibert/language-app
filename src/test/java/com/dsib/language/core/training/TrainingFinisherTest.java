@@ -5,7 +5,6 @@ import com.dsib.language.core.common.event.DomainEventsBus;
 import com.dsib.language.core.training.application.TrainingFinisher;
 import com.dsib.language.core.training.domain.*;
 import com.dsib.language.core.training.presentation.FinishTrainingDto;
-import com.dsib.language.core.word.domain.WordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,20 +33,18 @@ public class TrainingFinisherTest {
     private DomainEventsBus domainEventsBus;
     @Mock
     private TransactionTemplate transactionTemplate;
-    @Mock
-    private WordService wordService;
 
     private static final String TRAINING_ID = "TRAINING_ID";
-    private static final FinishTrainingDto TRAINING_DTO = new FinishTrainingDto(TRAINING_ID, List.of(), List.of(), List.of());
+    private static final FinishTrainingDto TRAINING_DTO = new FinishTrainingDto(TRAINING_ID, List.of(), List.of());
     private Training training;
 
     private TrainingFinisher trainingFinisher;
 
     @BeforeEach
     public void setUp() {
-        trainingFinisher = new TrainingFinisher(trainingRepository, domainEventsBus, transactionTemplate, wordService);
+        trainingFinisher = new TrainingFinisher(trainingRepository, domainEventsBus, transactionTemplate);
         training = new Training(
-            TRAINING_ID, TrainingStatus.CREATED, TrainingType.RANDOM, 10, List.of(), LocalDateTime.MIN
+            TRAINING_ID, TrainingStatus.CREATED, TrainingType.RANDOM, 10, List.of(), LocalDateTime.MIN, List.of()
         );
         when(transactionTemplate.execute(any()))
                 .thenAnswer(invocation ->
@@ -76,7 +73,7 @@ public class TrainingFinisherTest {
         ArgumentCaptor<DomainEvent> domainEventCaptor = ArgumentCaptor.forClass(DomainEvent.class);
         verify(domainEventsBus).publish(domainEventCaptor.capture());
         assertEquals("TrainingDomainEvent", domainEventCaptor.getValue().getName());
-        assertNotNull(((TrainingDomainEvent) domainEventCaptor.getValue()).getTraining());
+        assertNotNull(((TrainingDomainEvent) domainEventCaptor.getValue()).getEntityId());
     }
 
     @Test

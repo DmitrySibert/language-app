@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+//TODO: application layer?
 public class WordProgressFailProneService {
 
     private final WordProgressRepository wordProgressRepository;

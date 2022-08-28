@@ -13,13 +13,18 @@ class DictionaryService {
    + updateDictionary(List<InputStream> csvs): void
 }
 
+class WordController {
+  - WordService wordService
+
+  + getWords(List<String> origins): <List<Word>
+}
+
 class WordService {
    - WordRepository wordRepository
 
    + getByTags(List<String> tags): List<Word>
    + getByOrigin(List<String> origins): List<Word>
-   + getAll(): List<Word>
-   + upsert(List<Word> words): void
+   + getRandom(int size)): List<Word>
 }
 
 class WordRepository {

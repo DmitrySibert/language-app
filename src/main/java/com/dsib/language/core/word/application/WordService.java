@@ -1,5 +1,7 @@
-package com.dsib.language.core.word.domain;
+package com.dsib.language.core.word.application;
 
+import com.dsib.language.core.word.domain.Word;
+import com.dsib.language.core.word.domain.WordRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +23,7 @@ public class WordService {
         return wordRepository.getByOrigin(origins);
     }
 
-    public List<Word> getAll() {
-        return wordRepository.getAll();
-    }
-
-    public void upsert(List<Word> words) {
-        wordRepository.upsert(words);
+    public List<Word> getRandom(int size) {
+        return wordRepository.getRandom(size);
     }
 }
