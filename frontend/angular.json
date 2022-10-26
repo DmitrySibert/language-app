@@ -24,12 +24,17 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/bootstrap/img"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/bootstrap/css/bootstrap-responsive.min.css",
+              "src/bootstrap/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/bootstrap/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {

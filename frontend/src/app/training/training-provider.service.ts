@@ -42,28 +42,28 @@ export class TrainingProvider {
         params: params
       })
       .toPromise()
-      .then(
-        res => this.currentTraining = res
-      )
-      .then(res => {
-        let wordOriginsParams = new HttpParams();
-        this.currentTraining?.trainingSet.words.forEach(wordOrigin => {
-          wordOriginsParams = wordOriginsParams.append('origins', wordOrigin);
-        });
-        let wordOriginsList = new Array<Word>();
-        return this.http.get<Word[]>(
-          `${this.API_URL}/${this.API_WORD_ORIGINS_URL}`, {
-            params: wordOriginsParams
-          })
+      .then(newTraining => {
+        this.currentTraining = newTraining;
+        return this.getWords(this.currentTraining!.trainingSet.words)
           .toPromise()
-          .then(res => {
-            wordOriginsList = res;
-            wordOriginsList.forEach(word => {
+          .then(words => {
+            words.forEach(word => {
               this.wordOrigins.set(word.wordOrigin, word);
             })
             return true;
           })
       })
+  }
+
+  getWords(words: string[]): Observable<Word[]> {
+    let wordOriginsParams = new HttpParams();
+    words.forEach(wordOrigin => {
+      wordOriginsParams = wordOriginsParams.append('origins', wordOrigin);
+    });
+    return this.http.get<Word[]>(
+      `${this.API_URL}/${this.API_WORD_ORIGINS_URL}`, {
+        params: wordOriginsParams
+      });
   }
 
   getCurrentTraining(): Training | null {
