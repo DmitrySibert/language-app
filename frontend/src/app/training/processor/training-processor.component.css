@@ -1,24 +1,31 @@
-label {
-    color: #435960;
-    font-weight: bold;
+.green {
+    background-color: rgb(138, 187, 89);
 }
-input {
-    font-size: 1em;
-    padding: .5rem;
+
+.red {
+    background-color: rgb(177, 75, 75);
 }
-button {
-    margin-top: 20px;
-    margin-right: .5rem;
-    background-color: #eea;
-    padding: 1rem;
-    border-radius: 4px;
-    font-size: 1rem;
+
+.yellow {
+    background-color: rgb(187, 197, 94);
 }
-button:hover {
-    background-color: #cfd9dc;
+
+.font-size-25 {
+    font-size: 20px;
 }
-button:disabled {
-    background-color: #eeb;
-    color: #cca;
-    cursor: auto;
+
+.inline {
+    display: inline-block;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
+.max-400 {
+    max-width: 400px;
+}
+
+.label-customize {
+    line-height: normal;
 }

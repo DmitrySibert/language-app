@@ -1,23 +1,25 @@
-<div>
-    <h2>Training</h2>
+<div class="pagination-centered well container max-400">
+    <h2 class="page-header">Training</h2>
     <div>
-      <label for="word">Word: </label>
-      <div id="word">{{word.wordTranslate}}</div>
+      <label for="word" class="label label-info font-size-25 label-customize">Word: </label>
+      <div id="word" class = "font-size-25 inline">{{word.wordTranslate}}</div>
     </div>
     <div *ngIf = "isShowInfo">
       <div>
-          <label for="word-origin">Origin: </label>
-          <div id="word-origin">{{word.wordOrigin}}</div>
+          <label for="word-origin" class="label label-info font-size-25 label-customize">Origin: </label>
+          <div id="word-origin" class = "font-size-25 inline">{{word.wordOrigin}}</div>
       </div>
       <div>
-          <label for="word-info">Info: </label>
-          <div id="word-info">{{word.wordInfo}}</div>
+          <label for="word-info" class="label label-info font-size-25 label-customize">Info: </label>
+          <div id="word-info" class = "font-size-25 inline">{{word.wordInfo}}</div>
       </div>
     </div>
     <div>
-      <button (click)="approve()">Approve</button>
-      <button (click)="repeat()">Repeat</button>
-      <button (click)="showInfo()">Show Info</button>
-      <button (click)="complete()">Complete</button>
+      <button (click)="approve()" class="btn-large green margin-5">Approve</button>
+      <button (click)="repeat()" class="btn-large red margin-5">Repeat</button>
+      <button (click)="showInfo()" class="btn-large yellow margin-5">Show Info</button>
+    </div>
+    <div class="pagination-centered">
+      <button (click)="complete()" class="btn-large margin-5">Complete</button>
     </div>
 </div>

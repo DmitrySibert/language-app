@@ -1,29 +1,30 @@
-label {
-    color: #435960;
-    font-weight: bold;
-}
 input {
     font-size: 1em;
-    padding: .5rem;
 }
 button {
     margin-top: 20px;
     margin-right: .5rem;
-    background-color: #eea;
     padding: 1rem;
     border-radius: 4px;
     font-size: 1rem;
 }
-button:hover {
-    background-color: #cfd9dc;
-}
-button:disabled {
-    background-color: #eeb;
-    color: #cca;
-    cursor: auto;
+
+.font-size-25 {
+    font-size: 20px;
 }
 
-.all_tags {
-    width:fit-content;
-    height:400px;
+.inline {
+    display: inline-block;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
+.max-400 {
+    max-width: 400px;
+}
+
+.label-customize {
+    line-height: normal;
 }
