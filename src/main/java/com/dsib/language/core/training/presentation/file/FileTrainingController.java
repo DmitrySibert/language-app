@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
+import static com.dsib.language.core.word.presentation.Constants.X_USER_ID_HEADER;
+
 /**
  * File training rest controller.
  */
@@ -37,10 +39,12 @@ public class FileTrainingController {
   }
 
   @GetMapping("/download")
-  public ResponseEntity<Resource> getTraining(@RequestParam List<String> tags)
+  public ResponseEntity<Resource> getTraining(
+    @RequestParam List<String> tags, @RequestHeader(value = X_USER_ID_HEADER) String userId
+  )
     throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 
-    FileTraining fileTraining = fileTrainingProvider.build(tags);
+    FileTraining fileTraining = fileTrainingProvider.build(tags, userId);
     InputStreamResource inputStreamResource = new InputStreamResource(fileTraining.getFile());
 
     return ResponseEntity.ok()

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
-import { TrainingProvider } from '../training-provider.service'
-
 import { environment } from '../../../environments/environment';
+
+import { TrainingProvider } from '../training-provider.service'
+import { UserSession } from '../../login/user-session.service'
+
 
 @Component({
   selector: 'app-training-selector',
@@ -25,6 +26,7 @@ export class TrainingSelectorComponent implements OnInit {
 
   constructor(
     private trainingProvider: TrainingProvider,
+    private userSession: UserSession,
     private router: Router,
     private http: HttpClient
   ) {
@@ -33,8 +35,12 @@ export class TrainingSelectorComponent implements OnInit {
     this.size = 0;
     this.tagsArray = new Array();
 
+    let headers = new HttpHeaders();
+    headers = headers.append("X-USER-ID", userSession.getUser().username);
     this.http.get<string[]>(
-      `${this.API_URL}/${this.API_WORD_TAGS_URL}`
+      `${this.API_URL}/${this.API_WORD_TAGS_URL}`, {
+        headers: headers
+      }
     ).subscribe(tags => 
       {
         this.tagsArray.push(...tags);
@@ -54,8 +60,8 @@ export class TrainingSelectorComponent implements OnInit {
 
   clear(): void {
     this.size = 0;
+    this.selectedTag = '';
     this.selectedType = '';
-    this.tagsArray = new Array();
   }
 
   /**

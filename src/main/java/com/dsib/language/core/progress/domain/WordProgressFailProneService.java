@@ -15,14 +15,14 @@ public class WordProgressFailProneService {
         this.wordProgressRepository = wordProgressRepository;
     }
 
-    public List<WordProgress> getByType(ProgressType progressType, int number) {
+    public List<WordProgress> getByType(ProgressType progressType, int number, String ownerId) {
         List<WordProgress> wordsProgress = new LinkedList<>();
         switch (progressType) {
             case MOST_FAILED: {
-                wordProgressRepository.findMostFailedNonApproved(number).forEach(wordsProgress::add);
+                wordProgressRepository.findMostFailedNonApproved(number, ownerId).forEach(wordsProgress::add);
             }
             case OLD: {
-                wordProgressRepository.findOldNonApproved(number).forEach(wordsProgress::add);
+                wordProgressRepository.findOldNonApproved(number, ownerId).forEach(wordsProgress::add);
             }
         }
 

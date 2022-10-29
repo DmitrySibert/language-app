@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.dsib.language.core.word.presentation.Constants.X_USER_ID_HEADER;
+
 /**
  * Words rest controller.
  * <p>
@@ -33,12 +35,15 @@ public class WordController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Word>> getWords(@RequestParam("origins") List<String> origins) {
-    return ResponseEntity.status(HttpStatus.OK).body(wordService.getByOrigin(origins));
+  public ResponseEntity<List<Word>> getWords(
+    @RequestHeader(value = X_USER_ID_HEADER) String userId,
+    @RequestParam("origins") List<String> origins
+  ) {
+    return ResponseEntity.status(HttpStatus.OK).body(wordService.getByOrigin(origins, userId));
   }
 
   @GetMapping(value = "/tags")
-  public List<String> getAllTags() {
-    return wordService.getAllTags();
+  public List<String> getAllTags(@RequestHeader(value = X_USER_ID_HEADER) String userId) {
+    return wordService.getAllTags(userId);
   }
 }

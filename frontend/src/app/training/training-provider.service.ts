@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
-import { Training } from '../training';
-import { Word } from "../word";
+
+import { UserSession } from '../login/user-session.service';
+import { Training } from './model/training';
+import { Word } from "./model/word";
 
 import { environment } from '../../environments/environment';
 
@@ -22,7 +23,8 @@ export class TrainingProvider {
   };
 
   constructor(
-    private http: HttpClient) {
+    private http: HttpClient,
+    private userSession: UserSession) {
       this.currentTraining = null;
       this.wordOrigins = new Map<string, Word>();
       console.log("url: " + this.API_URL);
@@ -37,9 +39,12 @@ export class TrainingProvider {
     if (size > 0) {
       params = params.append('size', size);
     }
+    let headers = new HttpHeaders();
+    headers = headers.append("X-USER-ID", this.userSession.getUser().username);
     return this.http.get<Training>(
       `${this.API_URL}/${this.API_TRAINING_URL}`, {
-        params: params
+        params: params,
+        headers: headers
       })
       .toPromise()
       .then(newTraining => {
@@ -60,9 +65,12 @@ export class TrainingProvider {
     words.forEach(wordOrigin => {
       wordOriginsParams = wordOriginsParams.append('origins', wordOrigin);
     });
+    let headers = new HttpHeaders();
+    headers = headers.append("X-USER-ID", this.userSession.getUser().username);
     return this.http.get<Word[]>(
       `${this.API_URL}/${this.API_WORD_ORIGINS_URL}`, {
-        params: wordOriginsParams
+        params: wordOriginsParams,
+        headers: headers
       });
   }
 
@@ -75,10 +83,14 @@ export class TrainingProvider {
   }
 
   completeTraining(training: Training): void {
+    let headers = new HttpHeaders();
+    headers = headers.append("X-USER-ID", this.userSession.getUser().username);
       this.http.post(`${this.API_URL}/${this.API_TRAINING_URL}`, {
         id: training.id,
         wordsForRepetition: training.trainingSet.failed,
         approvedWords: training.trainingSet.approved
+      }, {
+        headers: headers
       }).subscribe();
   }
 

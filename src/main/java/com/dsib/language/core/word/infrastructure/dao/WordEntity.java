@@ -13,21 +13,23 @@ public class WordEntity implements Persistable<String> {
     @Id
     private String origin;
     private WordData data;
+    private String ownerId;
 
     public WordEntity() {
         isNew = true;
     }
 
-    public WordEntity(String origin, WordData data, boolean isNew) {
+    public WordEntity(String origin, String ownerId, WordData data, boolean isNew) {
         this.origin = origin;
+        this.ownerId = ownerId;
         this.data = data;
         this.isNew = isNew;
     }
 
-    public WordEntity(String origin, String translate, List<String> wordInfo, List<String> tags, boolean isNew) {
-        this.origin = origin;
-        this.isNew = isNew;
-        data = new WordData(translate, wordInfo, tags);
+    public WordEntity(
+      String origin, String ownerId, String translate, List<String> wordInfo, List<String> tags, boolean isNew
+    ) {
+      this(origin, ownerId, new WordData(translate, wordInfo, tags), isNew);
     }
 
     public String getOrigin() {
@@ -46,7 +48,15 @@ public class WordEntity implements Persistable<String> {
         this.data = data;
     }
 
-    @Override
+  public String getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(String ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  @Override
     public String getId() {
         return origin;
     }
