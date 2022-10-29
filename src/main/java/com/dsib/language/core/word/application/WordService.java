@@ -15,19 +15,19 @@ public class WordService {
         this.wordRepository = wordRepository;
     }
 
-    public List<String> getAllTags() {
-        return wordRepository.getAllTags();
+    public List<String> getAllTags(String ownerId) {
+        return wordRepository.getAllTags(ownerId);
     }
 
-    public List<Word> getByTags(List<String> tags) {
-        return wordRepository.getByTags(tags);
+    public List<Word> getByTags(List<String> tags, String ownerId) {
+        return wordRepository.getByTags(tags, ownerId);
     }
 
-    public List<Word> getByOrigin(List<String> origins) {
-        return wordRepository.getByOrigin(origins);
+    public List<Word> getByOrigin(List<String> origins, String ownerId) {
+        return wordRepository.getByOrigin(origins, ownerId);
     }
 
-    public List<Word> getRandom(int size) {
-        return wordRepository.getRandom(size);
+    public List<Word> getRandom(int size, String ownerId) {
+        return wordRepository.getRandom(size, ownerId);
     }
 }

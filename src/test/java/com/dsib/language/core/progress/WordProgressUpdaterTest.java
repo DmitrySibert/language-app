@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.dsib.language.core.TestUtils.ANY_STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -44,7 +45,8 @@ public class WordProgressUpdaterTest {
   private final String word2 = "word2";
   private final String word3 = "word3";
   private final Training training = new Training(
-    "id", TrainingStatus.COMPLETED, TrainingType.RANDOM, Integer.MAX_VALUE, List.of(), LocalDateTime.now(), List.of()
+    "id", "ownerId", TrainingStatus.COMPLETED, TrainingType.RANDOM,
+    Integer.MAX_VALUE, List.of(), LocalDateTime.now(), List.of()
   );
 
   @BeforeEach
@@ -68,7 +70,7 @@ public class WordProgressUpdaterTest {
     trainingSet.setApproved(List.of(word2, word3));
 
     when(trainingProvider.getTraining(any())).thenReturn(training);
-    when(wordProgressRepository.findAllByOrigin(anyList())).thenReturn(List.of());
+    when(wordProgressRepository.findAllByOrigin(anyList(), anyString())).thenReturn(List.of());
 
     domainEventsBus.publish(new TrainingDomainEvent(EMPTY_STRING, null));
 
@@ -102,10 +104,10 @@ public class WordProgressUpdaterTest {
     TrainingSet trainingSet = training.getTrainingSet();
     trainingSet.setFailed(List.of(word1));
     trainingSet.setApproved(List.of(word2, word3));
-    WordProgress wordProgress1 = new WordProgress(word1, 10, 10, LocalDateTime.MIN);
-    WordProgress wordProgress2 = new WordProgress(word2, 10, 10, LocalDateTime.MIN);
-    WordProgress wordProgress3 = new WordProgress(word3, 10, 10, LocalDateTime.MIN);
-    when(wordProgressRepository.findAllByOrigin(anyList())).
+    WordProgress wordProgress1 = new WordProgress(word1, ANY_STRING, 10, 10, LocalDateTime.MIN);
+    WordProgress wordProgress2 = new WordProgress(word2, ANY_STRING, 10, 10, LocalDateTime.MIN);
+    WordProgress wordProgress3 = new WordProgress(word3, ANY_STRING, 10, 10, LocalDateTime.MIN);
+    when(wordProgressRepository.findAllByOrigin(anyList(), anyString())).
       thenReturn(List.of(wordProgress1, wordProgress2, wordProgress3));
     when(trainingProvider.getTraining(any())).thenReturn(training);
 
@@ -141,7 +143,7 @@ public class WordProgressUpdaterTest {
     TrainingSet trainingSet = training.getTrainingSet();
     trainingSet.setFailed(List.of());
     trainingSet.setApproved(List.of());
-    when(wordProgressRepository.findAllByOrigin(anyList())).thenReturn(List.of());
+    when(wordProgressRepository.findAllByOrigin(anyList(), anyString())).thenReturn(List.of());
     when(trainingProvider.getTraining(any())).thenReturn(training);
 
     domainEventsBus.publish(new TrainingDomainEvent(EMPTY_STRING, null));

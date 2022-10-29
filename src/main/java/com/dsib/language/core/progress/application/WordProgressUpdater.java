@@ -5,6 +5,7 @@ import com.dsib.language.core.common.event.DomainEventsBus;
 import com.dsib.language.core.progress.domain.WordProgress;
 import com.dsib.language.core.progress.domain.WordProgressRepository;
 import com.dsib.language.core.training.application.TrainingProvider;
+import com.dsib.language.core.training.domain.Training;
 import com.dsib.language.core.training.domain.TrainingDomainEvent;
 import com.dsib.language.core.training.domain.TrainingSet;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,8 @@ public class WordProgressUpdater {
   //TODO: check if this code should be decomposed to application and domain logic
   private void handleTrainingDomainEvent(DomainEvent domainEvent) {
     TrainingDomainEvent trainingDomainEvent = (TrainingDomainEvent) domainEvent;
-    TrainingSet trainingSet = trainingProvider.getTraining(trainingDomainEvent.getEntityId()).getTrainingSet();
+    Training training = trainingProvider.getTraining(trainingDomainEvent.getEntityId());
+    TrainingSet trainingSet = training.getTrainingSet();
     //performance: reduce number of DB calls
     List<String> allTrainedWords = new ArrayList<>(
       trainingSet.getApproved().size() + trainingSet.getFailed().size()
@@ -53,16 +55,17 @@ public class WordProgressUpdater {
     allTrainedWords.addAll(trainingSet.getFailed());
 
     transactionTemplate.execute(status -> {
-      Map<String, WordProgress> wordsProgressByOrigin = wordProgressRepository.findAllByOrigin(allTrainedWords)
-        .parallelStream()
-        .collect(Collectors.toMap(WordProgress::getOrigin, Function.identity()));
+      Map<String, WordProgress> wordsProgressByOrigin =
+        wordProgressRepository.findAllByOrigin(allTrainedWords, training.getOwnerId())
+          .parallelStream()
+          .collect(Collectors.toMap(WordProgress::getOrigin, Function.identity()));
 
       List<WordProgress> newWordsProgress = new ArrayList<>(allTrainedWords.size());
       List<WordProgress> updatedWordsProgress = new ArrayList<>(allTrainedWords.size());
       allTrainedWords.forEach(trainedWordOrigin -> {
         WordProgress existing = wordsProgressByOrigin.get(trainedWordOrigin);
         if (existing == null) {
-          WordProgress wordProgress = new WordProgress(trainedWordOrigin);
+          WordProgress wordProgress = new WordProgress(trainedWordOrigin, training.getOwnerId());
           wordsProgressByOrigin.put(trainedWordOrigin, wordProgress);
           newWordsProgress.add(wordProgress);
         } else {

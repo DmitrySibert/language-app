@@ -13,6 +13,8 @@ public class Training {
   @Getter
   private String id;
   @Getter
+  private String ownerId;
+  @Getter
   private TrainingStatus status;
   @Getter
   private final TrainingType type;
@@ -30,15 +32,17 @@ public class Training {
   private TrainingSet trainingSet;
 
   public Training(
-    String id, TrainingStatus status, TrainingType type, Integer size,
+    String id, String ownerId, TrainingStatus status, TrainingType type, Integer size,
     List<String> tags, LocalDateTime createdAt, List<String> words
   ) {
     assertNotNull("id", id);
+    assertNotNull("ownerId", ownerId);
     assertNotNull("status", status);
     assertNotNull("type", type);
     assertNotNull("tags", tags);
     assertNotNull("createdAt", createdAt);
     this.id = id;
+    this.ownerId = ownerId;
     this.status = status;
     this.type = type;
     this.size = size;
@@ -49,10 +53,10 @@ public class Training {
   }
 
   public Training(
-    String id, TrainingStatus status, TrainingType type, Integer size,
+    String id, String ownerId, TrainingStatus status, TrainingType type, Integer size,
     List<String> tags, LocalDateTime createdAt, TrainingSet trainingSet
   ) {
-    this(id, status, type, size, tags, createdAt, trainingSet.getWords());
+    this(id, ownerId, status, type, size, tags, createdAt, trainingSet.getWords());
     this.trainingSet.setApproved(trainingSet.getApproved());
     this.trainingSet.setFailed(trainingSet.getFailed());
   }

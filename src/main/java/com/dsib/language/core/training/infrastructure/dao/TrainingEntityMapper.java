@@ -9,7 +9,7 @@ public class TrainingEntityMapper {
 
   public Training fromEntity(TrainingEntity trainingEntity) {
     Training training = new Training(
-      trainingEntity.getId(), trainingEntity.getStatus(), trainingEntity.getType(),
+      trainingEntity.getId(), trainingEntity.getOwnerId(), trainingEntity.getStatus(), trainingEntity.getType(),
       trainingEntity.getSize(), trainingEntity.getTags(), trainingEntity.getCreatedAt(), trainingEntity.getTrainingSet()
     );
     if (null != trainingEntity.getCompletedAt()) {
@@ -28,14 +28,14 @@ public class TrainingEntityMapper {
 
   public TrainingEntity toEntity(Training training) {
     return new TrainingEntity(
-      training.getId(), training.getStatus(), training.getType(), training.getSize(),
+      training.getId(), training.getOwnerId(), training.getStatus(), training.getType(), training.getSize(),
       training.getTags(), training.getCreatedAt(), training.getCompletedAt(), training.getTrainingSet(),false
     );
   }
 
   public TrainingEntity toNewEntity(Training training) {
     return new TrainingEntity(
-      training.getId(), training.getStatus(), training.getType(), training.getSize(),
+      training.getId(), training.getOwnerId(), training.getStatus(), training.getType(), training.getSize(),
       training.getTags(), training.getCreatedAt(), training.getCompletedAt(), training.getTrainingSet(), true
     );
   }

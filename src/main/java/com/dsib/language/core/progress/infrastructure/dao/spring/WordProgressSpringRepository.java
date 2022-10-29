@@ -12,20 +12,22 @@ public interface WordProgressSpringRepository
 {
     @Query(
         "SELECT * FROM word_progress wp\n" +
-                "WHERE wp.failed - wp.approved > 0\n" +
+                "WHERE wp.failed - wp.approved > 0 AND owner_id = :ownerId\n" +
                 "ORDER BY wp.failed - wp.approved DESC\n" +
                 "LIMIT :limit;"
     )
-    Iterable<WordProgressEntity> findMostFailedNonApproved(@Param("limit") int limit);
+    Iterable<WordProgressEntity> findMostFailedNonApproved(@Param("limit") int limit, @Param("ownerId") String ownerId);
 
     @Query(
         "SELECT * FROM word_progress wp\n" +
-                "WHERE wp.failed - wp.approved > 0\n" +
+                "WHERE wp.failed - wp.approved > 0 AND owner_id = :ownerId\n" +
                 "ORDER BY updated_at ASC\n" +
                 "LIMIT :limit;"
     )
-    Iterable<WordProgressEntity> findOldNonApproved(@Param("limit") int limit);
+    Iterable<WordProgressEntity> findOldNonApproved(@Param("limit") int limit, @Param("ownerId") String ownerId);
 
-    @Query("SELECT * FROM word_progress WHERE origin IN (:origins)")
-    Iterable<WordProgressEntity> findAllByOrigin(@Param("origins") Iterable<String> origins);
+    @Query("SELECT * FROM word_progress WHERE origin IN (:origins) AND owner_id = :ownerId")
+    Iterable<WordProgressEntity> findAllByOrigin(
+      @Param("origins") Iterable<String> origins, @Param("ownerId") String ownerId
+    );
 }

@@ -1,6 +1,5 @@
 package com.dsib.language.core.word.application.dictionary;
 
-import com.dsib.language.core.word.application.WordService;
 import com.dsib.language.core.word.domain.Word;
 import com.dsib.language.core.word.domain.WordRepository;
 import com.opencsv.CSVReader;
@@ -44,15 +43,15 @@ public class DictionaryService {
         );
     }
 
-    public void updateDictionary(InputStream csv) {
+    public void updateDictionary(InputStream csv, String ownerId) {
         try (Reader csvReader = new InputStreamReader(csv)) {
-            wordRepository.upsert(readAllWords(csvReader));
+            wordRepository.upsert(readAllWords(csvReader), ownerId);
         } catch (Exception e) {
             throw new RuntimeException("Dictionary service: update dictionary from file error:", e);
         }
     }
 
-    public void updateDictionary(List<InputStream> csvs) {
-        csvs.forEach(this::updateDictionary);
+    public void updateDictionary(List<InputStream> csvs, String ownerId) {
+        csvs.forEach(csv -> this.updateDictionary(csv, ownerId));
     }
 }

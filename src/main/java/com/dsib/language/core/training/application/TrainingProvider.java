@@ -17,64 +17,64 @@ import java.util.stream.Collectors;
 @Service
 public class TrainingProvider {
 
-    private final TrainingRepository trainingRepository;
-    private final WordService wordService;
-    private final WordProgressFailProneService wordProgressFailProneService;
+  private final TrainingRepository trainingRepository;
+  private final WordService wordService;
+  private final WordProgressFailProneService wordProgressFailProneService;
 
-    public TrainingProvider(
-            TrainingRepository trainingRepository, WordService wordService,
-            WordProgressFailProneService wordProgressFailProneService
-    ) {
-        this.trainingRepository = trainingRepository;
-        this.wordService = wordService;
-        this.wordProgressFailProneService = wordProgressFailProneService;
-    }
+  public TrainingProvider(
+    TrainingRepository trainingRepository, WordService wordService,
+    WordProgressFailProneService wordProgressFailProneService
+  ) {
+    this.trainingRepository = trainingRepository;
+    this.wordService = wordService;
+    this.wordProgressFailProneService = wordProgressFailProneService;
+  }
 
-    public Training getTraining(String id) {
-      return trainingRepository.find(id)
-        .orElseThrow(() -> new NoSuchElementException("" + id));
-    }
+  public Training getTraining(String id) {
+    return trainingRepository.find(id)
+      .orElseThrow(() -> new NoSuchElementException("" + id));
+  }
 
-    public Training getTraining(TrainingType type, List<String> tags, Integer size) {
-        Training training;
-        switch (type) {
-            case RANDOM: {
-                List<Word> trainingWords = wordService.getRandom(size);
-                training = new Training(
-                        UUID.randomUUID().toString(), TrainingStatus.CREATED, TrainingType.RANDOM,
-                        trainingWords.size(), List.of(), LocalDateTime.now(), toString(trainingWords)
-                );
-                break;
-            }
-            case REPEAT: {
-                List<String> origins = wordProgressFailProneService.getByType(ProgressType.MOST_FAILED, size)
-                        .parallelStream()
-                        .map(WordProgress::getOrigin)
-                        .collect(Collectors.toList());
-                training = new Training(
-                        UUID.randomUUID().toString(), TrainingStatus.CREATED, TrainingType.REPEAT,
-                        origins.size(), List.of(), LocalDateTime.now(), origins
-                );
-                break;
-            }
-            case TAGGED: {
-                List<Word> trainingWords = wordService.getByTags(tags);
-                training = new Training(
-                        UUID.randomUUID().toString(), TrainingStatus.CREATED, TrainingType.TAGGED,
-                        trainingWords.size(), tags, LocalDateTime.now(), toString(trainingWords)
-                );
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException();
-            }
-        }
-        return trainingRepository.create(training);
+  public Training createNewTraining(TrainingType type, List<String> tags, Integer size, String ownerId) {
+    Training training;
+    switch (type) {
+      case RANDOM: {
+        List<Word> trainingWords = wordService.getRandom(size, ownerId);
+        training = new Training(
+          UUID.randomUUID().toString(), ownerId, TrainingStatus.CREATED, TrainingType.RANDOM,
+          trainingWords.size(), List.of(), LocalDateTime.now(), toString(trainingWords)
+        );
+        break;
+      }
+      case REPEAT: {
+        List<String> origins = wordProgressFailProneService.getByType(ProgressType.MOST_FAILED, size, ownerId)
+          .parallelStream()
+          .map(WordProgress::getOrigin)
+          .collect(Collectors.toList());
+        training = new Training(
+          UUID.randomUUID().toString(), ownerId, TrainingStatus.CREATED, TrainingType.REPEAT,
+          origins.size(), List.of(), LocalDateTime.now(), origins
+        );
+        break;
+      }
+      case TAGGED: {
+        List<Word> trainingWords = wordService.getByTags(tags, ownerId);
+        training = new Training(
+          UUID.randomUUID().toString(), ownerId, TrainingStatus.CREATED, TrainingType.TAGGED,
+          trainingWords.size(), tags, LocalDateTime.now(), toString(trainingWords)
+        );
+        break;
+      }
+      default: {
+        throw new IllegalArgumentException("Type " + type + " is not supported");
+      }
     }
+    return trainingRepository.create(training);
+  }
 
-    private List<String> toString(List<Word> words) {
-        return words.stream()
-                .map(Word::getWordOrigin)
-                .collect(Collectors.toList());
-    }
+  private List<String> toString(List<Word> words) {
+    return words.stream()
+      .map(Word::getWordOrigin)
+      .collect(Collectors.toList());
+  }
 }

@@ -13,7 +13,6 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Table("training")
 @Data
 public class TrainingEntity implements Persistable<String> {
@@ -22,6 +21,7 @@ public class TrainingEntity implements Persistable<String> {
   private final boolean isNew;
   @Id
   private String id;
+  private String ownerId;
   private TrainingStatus status;
   private TrainingType type;
   private Integer size;
@@ -36,11 +36,12 @@ public class TrainingEntity implements Persistable<String> {
   }
 
   public TrainingEntity(
-    String id, TrainingStatus status, TrainingType type, Integer size, List<String> tags,
+    String id, String ownerId, TrainingStatus status, TrainingType type, Integer size, List<String> tags,
     LocalDateTime createdAt, LocalDateTime completedAt, TrainingSet trainingSet, boolean isNew
   ) {
     this.isNew = isNew;
     this.id = id;
+    this.ownerId = ownerId;
     this.status = status;
     this.type = type;
     this.size = size;

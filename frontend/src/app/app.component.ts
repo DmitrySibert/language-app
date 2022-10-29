@@ -14,7 +14,5 @@ export class AppComponent {
   ) {}
 
   ngOnInit(): void {
-
-    let k = 10;
   }
 }

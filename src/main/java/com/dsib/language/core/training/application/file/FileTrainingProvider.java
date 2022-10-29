@@ -34,17 +34,17 @@ public class FileTrainingProvider {
     this.wordService = wordService;
   }
 
-  public FileTraining build(List<String> tags)
+  public FileTraining build(List<String> tags, String ownerId)
     throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException
   {
-    Training training = trainingProvider.getTraining(TrainingType.TAGGED, tags, null);
+    Training training = trainingProvider.createNewTraining(TrainingType.TAGGED, tags, null, ownerId);
     try (
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       OutputStreamWriter writer = new OutputStreamWriter(baos)
     ) {
       List<CsvRow> trainingWords = new LinkedList<>();
       trainingWords.add(TrainingCsvRow.TITLE);
-      wordService.getByOrigin(training.getTrainingSet().getWords()).forEach(word -> trainingWords.add(
+      wordService.getByOrigin(training.getTrainingSet().getWords(), ownerId).forEach(word -> trainingWords.add(
         new TrainingCsvRow(word.getWordTranslate(), "", String.join(",", word.getWordInfo()))
       ));
 

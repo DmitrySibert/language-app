@@ -19,7 +19,7 @@ public class TrainingTest {
 
   @BeforeEach
   public void setUp() {
-    training = new Training("id", TrainingStatus.CREATED, TrainingType.RANDOM, 10, List.of(), LocalDateTime.MIN, List.of());
+    training = new Training("id", "ownerId", TrainingStatus.CREATED, TrainingType.RANDOM, 10, List.of(), LocalDateTime.MIN, List.of());
   }
 
   @Test

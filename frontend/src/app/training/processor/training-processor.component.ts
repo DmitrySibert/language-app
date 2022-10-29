@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 import { TrainingProvider } from '../training-provider.service'
-import { Training } from '../../training';
-import { Word } from '../../word';
+import { UserSession } from '../../login/user-session.service'
+import { Training } from '../model/training';
+import { Word } from '../model/word';
 
 @Component({
   selector: 'app-training-processor',
@@ -20,6 +21,7 @@ export class TrainingProcessorComponent implements OnInit {
 
   constructor(
     private trainingProvider: TrainingProvider,
+    private userSession: UserSession,
     private location: Location
   ) {
     this.word = {
