@@ -1,0 +1,30 @@
+input {
+    font-size: 1em;
+}
+button {
+    margin-top: 20px;
+    margin-right: .5rem;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.font-size-25 {
+    font-size: 20px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
+.max-400 {
+    max-width: 400px;
+}
+
+.label-customize {
+    line-height: normal;
+}

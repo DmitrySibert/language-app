@@ -31,7 +31,7 @@ public class WordSpringRepositoryExtensionImpl implements WordSpringRepositoryEx
   public int[] upsert(List<WordEntity> words) {
     return jdbcTemplate.batchUpdate("" +
         "INSERT INTO word_entity(owner_id, origin, data) VALUES (?, ?, ?)\n" +
-        "ON CONFLICT(origin) DO UPDATE\n" +
+        "ON CONFLICT(owner_id, origin) DO UPDATE\n" +
         "  SET data = word_entity.data;",
       new BatchPreparedStatementSetter() {
         @Override
