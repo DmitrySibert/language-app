@@ -16,6 +16,6 @@ public interface WordSpringRepository extends CrudRepository<WordEntity, String>
     "SELECT DISTINCT jsonb_array_elements_text(we.\"data\"->'tags') FROM word_entity we WHERE we.owner_id = :ownerId"
   )
   List<String> findAllTagsByOwnerId(@Param("ownerId") String ownerId);
-  Iterable<WordEntity> findByOwnerId(String ownerId);
-  Iterable<WordEntity> findByOriginInAndOwnerId(Collection<String> origins, String ownerId);
+  List<WordEntity> findByOwnerId(String ownerId);
+  List<WordEntity> findByOriginInAndOwnerId(Collection<String> origins, String ownerId);
 }

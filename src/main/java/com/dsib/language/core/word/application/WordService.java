@@ -19,8 +19,8 @@ public class WordService {
         return wordRepository.getAllTags(ownerId);
     }
 
-    public List<Word> getByTags(List<String> tags, String ownerId) {
-        return wordRepository.getByTags(tags, ownerId);
+    public List<Word> getByTags(List<String> tags, Integer size, String ownerId) {
+        return wordRepository.getByTags(tags, size, ownerId);
     }
 
     public List<Word> getByOrigin(List<String> origins, String ownerId) {
