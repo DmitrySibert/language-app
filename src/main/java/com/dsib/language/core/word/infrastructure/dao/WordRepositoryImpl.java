@@ -24,8 +24,17 @@ public class WordRepositoryImpl implements WordRepository {
   }
 
   @Override
-  public List<Word> getByTags(List<String> tags, String ownerId) {
-    return WordEntityMapper.fromEntity(wordSpringRepository.findByTags(tags, ownerId));
+  public List<Word> getByTags(List<String> tags, Integer size, String ownerId) {
+    if (size == null) {
+      return WordEntityMapper.fromEntity(wordSpringRepository.findByTags(tags, ownerId));
+    } else {
+      //TODO: SELECT * FROM big TABLESAMPLE SYSTEM_ROWS(1000);
+      //TODO: generate random indexes in code, select with artificial sequence id and filter by this artificial id in generated indexes
+      List<WordEntity> wordEntities = wordSpringRepository.findByTags(tags, ownerId);
+      int actualSize = Math.min(wordEntities.size(), size);
+      Collections.shuffle(wordEntities);
+      return WordEntityMapper.fromEntity(wordEntities.subList(0, actualSize));
+    }
   }
 
   @Override
@@ -36,10 +45,11 @@ public class WordRepositoryImpl implements WordRepository {
   @Override
   public List<Word> getRandom(int size, String ownerId) {
     //TODO: SELECT * FROM big TABLESAMPLE SYSTEM_ROWS(1000);
-    List<Word> words = WordEntityMapper.fromEntity(wordSpringRepository.findByOwnerId(ownerId));
-    int actualSize = Math.min(words.size(), size);
-    Collections.shuffle(words);
-    return words.subList(0, actualSize);
+    //TODO: generate random indexes in code, select with artificial sequence id and filter by this artificial id in generated indexes
+    List<WordEntity> wordEntities = wordSpringRepository.findByOwnerId(ownerId);
+    int actualSize = Math.min(wordEntities.size(), size);
+    Collections.shuffle(wordEntities);
+    return WordEntityMapper.fromEntity(wordEntities.subList(0, actualSize));
   }
 
   @Override

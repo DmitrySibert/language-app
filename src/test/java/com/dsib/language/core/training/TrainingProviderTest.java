@@ -54,7 +54,7 @@ public class TrainingProviderTest {
 
   @Test
   public void testGetTrainingByTags() {
-    when(wordService.getByTags(any(List.class), any()))
+    when(wordService.getByTags(any(List.class), any(), any()))
       .then(args -> {
         List<Word> words = new LinkedList<>();
         words.add(word1);

@@ -58,7 +58,7 @@ public class TrainingProvider {
         break;
       }
       case TAGGED: {
-        List<Word> trainingWords = wordService.getByTags(tags, ownerId);
+        List<Word> trainingWords = wordService.getByTags(tags, size, ownerId);
         training = new Training(
           UUID.randomUUID().toString(), ownerId, TrainingStatus.CREATED, TrainingType.TAGGED,
           trainingWords.size(), tags, LocalDateTime.now(), toString(trainingWords)
