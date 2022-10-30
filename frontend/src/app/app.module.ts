@@ -7,14 +7,16 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { TrainingSelectorComponent } from './training/selector/training-selector.component';
 import { TrainingProcessorComponent } from './training/processor/training-processor.component';
-import { LoginComponent } from './login/login.component'
+import { LoginComponent } from './login/login.component';
+import { DictionaryComponent } from './dictionary/dictionary.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TrainingSelectorComponent,
     TrainingProcessorComponent,
-    LoginComponent
+    LoginComponent,
+    DictionaryComponent
   ],
   imports: [
     FormsModule,

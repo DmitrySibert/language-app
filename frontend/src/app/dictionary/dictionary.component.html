@@ -1,0 +1,18 @@
+<div class="pagination-centered well container max-400">
+    <h2 class="page-header">Upload your dictionaries: </h2>
+    <div>
+        <label for="file1" class="label label-info font-size-25 label-customize">File1: </label>
+        <input id="file1" type="file" (change)="onFile1Selected($event)" #fileUpload/>
+    </div>
+    <div>
+        <label for="file2" class="label label-info font-size-25 label-customize">File2: </label>
+        <input id="file2" type="file" (change)="onFile2Selected($event)" #fileUpload/>
+    </div>
+    <div>
+        <label for="file3" class="label label-info font-size-25 label-customize">File3: </label>
+        <input id="file3" type="file" (change)="onFile3Selected($event)" #fileUpload/>
+    </div>
+    <h6 class="page-header">Note: you can upload up to 3 files at once</h6>
+    <button (click)="upload()" class="btn">Upload all</button>
+    <button (click)="switchToTraining()" class="btn">Go training</button>
+</div>

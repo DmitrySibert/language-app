@@ -64,6 +64,12 @@ export class TrainingSelectorComponent implements OnInit {
     this.selectedType = '';
   }
 
+  toDictionaries(): void {
+    this.router.navigate(['/dictionary'])
+  }
+
+  
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
