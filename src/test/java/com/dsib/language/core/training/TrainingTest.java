@@ -9,7 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,5 +82,44 @@ public class TrainingTest {
     assertEquals(1, training.getSet().getWords().size());
     assertEquals(1, training.getSet().getApproved().size());
     assertEquals(1, training.getSet().getFailed().size());
+  }
+
+  private static class Job {
+
+    private Integer num;
+
+    public Job(Integer num) {
+      this.num = num;
+    }
+
+    private String runJob() {
+      System.out.println(Thread.currentThread().getName() + " res: " + num);
+      return num.toString();
+    };
+
+  }
+
+
+  @Test
+  public void jobRunner() {
+
+    Map<Integer, List<Job>> jobs = new HashMap<>(){{
+      put(1, List.of(new Job(1), new Job(2), new Job(3)));
+      put(2, List.of(new Job(11), new Job(12), new Job(13)));
+      put(3, List.of(new Job(21), new Job(22), new Job(23)));
+    }};
+
+    CompletableFuture<Void> proxyFuture = CompletableFuture.completedFuture(null);
+
+    for (var group : jobs.entrySet()) {
+      proxyFuture = proxyFuture.thenCompose(prevRes -> {
+
+        List<CompletableFuture<String>> groupFutures = group.getValue().stream()
+                .map(job -> CompletableFuture.supplyAsync(job::runJob))
+                .collect(Collectors.toList());
+
+        return CompletableFuture.allOf(groupFutures.toArray(new CompletableFuture[]{}));
+      });
+    }
   }
 }

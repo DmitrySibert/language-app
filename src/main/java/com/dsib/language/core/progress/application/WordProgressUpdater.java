@@ -41,7 +41,6 @@ public class WordProgressUpdater {
     return wordProgressRepository.update(wordsProgress);
   }
 
-  //TODO: check if this code should be decomposed to application and domain logic
   private void handleTrainingDomainEvent(DomainEvent domainEvent) {
     TrainingDomainEvent trainingDomainEvent = (TrainingDomainEvent) domainEvent;
     TrainingSet trainingSet = trainingProvider.getTraining(trainingDomainEvent.getEntityId()).getSet();

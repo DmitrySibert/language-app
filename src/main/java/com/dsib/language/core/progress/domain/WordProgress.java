@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class WordProgress {
 
-    private @Getter String origin;
+    private final @Getter String origin;
     private @Getter int approved;
     private @Getter int failed;
     private @Getter LocalDateTime updatedAt;
